@@ -6,6 +6,7 @@
 
 #include "Relay.h"
 #include "Boiler.h"
+#include "Toggle.h"
 
 #define SERIAL_BAUDRATE         9600
 
@@ -15,52 +16,69 @@
 #define BOILER_IS_BOILING_PIN   A0
 #define BOILER_IS_STEAM_PIN     A1
 
+#define TOGGLE_PIN              A2
+
 Relay pump(PUMP_RELAY_PIN);
 Boiler boiler(BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN);
+Toggle toggle(TOGGLE_PIN);
 
-boolean isSwitchedToSteam = false;
-boolean isSwitchedToCold = false;
+toggle_state_t lastToggleState;
 
 void setup() {
     Serial.begin(SERIAL_BAUDRATE);
 
     Serial.print("Initial pump state: ");
-    Serial.println(pump.getState());
+    Serial.println(pump.getState() ? "ON" : "OFF");
 
     Serial.print("Initial boiler state: ");
-    Serial.println(boiler.getState());
+    Serial.println(boiler.getState() ? "ON" : "OFF");
 
-    // Switch pump on for 10 seconds to test wiring and catch up pressure in boiler
-    // Warning! Do not start to heat empty boiler
-    Serial.println("Test pump for 10 seconds...");
-    pump.on();
-    delay(10000);
-    pump.off();
-
-    // Set target temp to BOILING and boiler will be switched on when first boiler.update() called
-    Serial.println("Pump switched off, let's get some boiling water...");
-    boiler.setTargetTemp(BOILING);
+    Serial.print("Initial toggle state: ");
+    lastToggleState = toggle.getState();
+    switch (lastToggleState) {
+        case BOIL: Serial.println("BOIL"); break;
+        case MAKE_STEAM: Serial.println("MAKE_STEAM"); break;
+        case POUR_WATER: Serial.println("POUR_WATER"); break;
+        default: Serial.println("OFF"); break;
+    }
 }
 
 void loop() {
-    // Boiler heated up to BOILING temp, we can switch it to STEAM and remeber this to prevent repeating
-    if (!isSwitchedToSteam && boiler.getTemp() == BOILING) {
-        Serial.println("Okey, we have boiling water, now we gonna raise the temperature up to steam...");
-        boiler.setTargetTemp(STEAM);
-        isSwitchedToSteam = true;
+    toggle_state_t toggleState = toggle.getState();
+
+    // Print message only if toogle state changes
+    if (toggleState != lastToggleState) {
+        lastToggleState = toggleState;
+        Serial.print("Toggle switched to state: ");
+        switch (toggleState) {
+            case BOIL: Serial.println("BOIL"); break;
+            case MAKE_STEAM: Serial.println("MAKE_STEAM"); break;
+            case POUR_WATER: Serial.println("POUR_WATER"); break;
+            default: Serial.println("OFF"); break;
+        }
     }
 
-    // Boiler heated up to STEAM temp, so we can switch it off and remember this to prevent repeating
-    if (!isSwitchedToCold && boiler.getTemp() == STEAM) {
-        Serial.println("Wow, so hot! Cool down, lil' boila...");
-        boiler.setTargetTemp(COLD);
-        isSwitchedToCold = true;
-    }
+    // Do actions depending on toggle state
+    switch (toggleState) {
+        case BOIL:
+            pump.off();
+            boiler.setTargetTemp(BOILING);
+            break;
 
-    // Boiler cooled down, print a message and set flag to false to prevent repeating
-    if (isSwitchedToCold && boiler.getTemp() == COLD) {
-        Serial.println("Boiler has cooled down, but be careful! It's temperature just below boiling.");
-        isSwitchedToCold = false;
+        case MAKE_STEAM:
+            pump.off();
+            boiler.setTargetTemp(STEAM);
+            break;
+
+        case POUR_WATER:
+            pump.on();
+            boiler.setTargetTemp(COLD);
+            break;
+
+        default:
+            pump.off();
+            boiler.setTargetTemp(COLD);
+            break;
     }
 
     boiler.update();
