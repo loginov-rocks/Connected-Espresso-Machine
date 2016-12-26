@@ -10,7 +10,46 @@ Coffeemaker::Coffeemaker(int pumpPin, int boilerPin, int isBoilingPin, int isSte
     _pump(pumpPin),
     _boiler(boilerPin, isBoilingPin, isSteamPin),
     _toggle(togglePin) {
-    // Nothing to do here, everything will be done in constructors
+    off();
+}
+
+void Coffeemaker::off() {
+    stopPouringWater();
+    coolDown();
+    setCommand(__FUNCTION__);
+}
+
+void Coffeemaker::pourWater() {
+    _pump.on();
+    setCommand(__FUNCTION__);
+}
+
+void Coffeemaker::stopPouringWater() {
+    _pump.off();
+    setCommand( __FUNCTION__);
+}
+
+void Coffeemaker::coolDown() {
+    _boiler.setTargetTemp(COLD);
+    setCommand(__FUNCTION__);
+}
+
+void Coffeemaker::boil() {
+    _boiler.setTargetTemp(BOILING);
+    setCommand(__FUNCTION__);
+}
+
+void Coffeemaker::makeSteam() {
+    _boiler.setTargetTemp(STEAM);
+    setCommand(__FUNCTION__);
+}
+
+void Coffeemaker::setCommand(String command) {
+    _command = command;
+}
+
+String Coffeemaker::getCommand() {
+    return _command;
 }
 
 boolean Coffeemaker::getPumpState() {
@@ -36,23 +75,22 @@ toggle_state_t Coffeemaker::getToggleState() {
 void Coffeemaker::update() {
     switch (_toggle.getState()) {
         case BOIL:
-            _pump.off();
-            _boiler.setTargetTemp(BOILING);
+            stopPouringWater();
+            boil();
             break;
 
         case MAKE_STEAM:
-            _pump.off();
-            _boiler.setTargetTemp(STEAM);
+            stopPouringWater();
+            makeSteam();
             break;
 
         case POUR_WATER:
-            _pump.on();
-            _boiler.setTargetTemp(COLD);
+            coolDown();
+            pourWater();
             break;
 
         default:
-            _pump.off();
-            _boiler.setTargetTemp(COLD);
+            off();
             break;
     }
 

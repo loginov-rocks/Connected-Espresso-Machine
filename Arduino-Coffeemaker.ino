@@ -18,40 +18,24 @@
 
 Coffeemaker coffeemaker(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN);
 
-toggle_state_t lastToggleState;
+String lastCommand;
 
 void setup() {
     Serial.begin(SERIAL_BAUDRATE);
 
-    Serial.print("Initial pump state: ");
-    Serial.println(coffeemaker.getPumpState() ? "ON" : "OFF");
-
-    Serial.print("Initial boiler state: ");
-    Serial.println(coffeemaker.getBoilerState() ? "ON" : "OFF");
-
-    Serial.print("Initial toggle state: ");
-    lastToggleState = coffeemaker.getToggleState();
-    switch (lastToggleState) {
-        case BOIL: Serial.println("BOIL"); break;
-        case MAKE_STEAM: Serial.println("MAKE_STEAM"); break;
-        case POUR_WATER: Serial.println("POUR_WATER"); break;
-        default: Serial.println("OFF"); break;
-    }
+    Serial.print("Initial coffeemaker command: ");
+    lastCommand = coffeemaker.getCommand();
+    Serial.println(lastCommand);
 }
 
 void loop() {
-    toggle_state_t toggleState = coffeemaker.getToggleState();
+    String command = coffeemaker.getCommand();
 
-    // Print message only if toogle state changes
-    if (toggleState != lastToggleState) {
-        lastToggleState = toggleState;
-        Serial.print("Toggle switched to state: ");
-        switch (toggleState) {
-            case BOIL: Serial.println("BOIL"); break;
-            case MAKE_STEAM: Serial.println("MAKE_STEAM"); break;
-            case POUR_WATER: Serial.println("POUR_WATER"); break;
-            default: Serial.println("OFF"); break;
-        }
+    // Print message only if coffeemaker command changes
+    if (command != lastCommand) {
+        lastCommand = command;
+        Serial.print("Coffeemaker switched to command: ");
+        Serial.println(command);
     }
 
     coffeemaker.update();

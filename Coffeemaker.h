@@ -17,8 +17,20 @@ class Coffeemaker {
         Boiler _boiler;
         Toggle _toggle;
 
+        String _command;
+
     public:
         Coffeemaker(int, int, int, int, int);
+
+        void off();
+        void pourWater();
+        void stopPouringWater();
+        void coolDown();
+        void boil();
+        void makeSteam();
+
+        void setCommand(String);
+        String getCommand();
 
         boolean getPumpState();
 
