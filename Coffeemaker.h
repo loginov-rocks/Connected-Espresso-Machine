@@ -13,33 +13,35 @@
 
 class Coffeemaker {
     private:
-        Relay _pump;
-        Boiler _boiler;
-        Toggle _toggle;
+        Relay   _pump;
+        Boiler  _boiler;
+        Toggle  _toggle;
 
         String _command;
 
+        void setCommand(String);
+
     public:
+        // Constructor
         Coffeemaker(int, int, int, int, int);
 
-        void off();
-        void pourWater();
-        void stopPouringWater();
-        void coolDown();
-        void boil();
-        void makeSteam();
+        // Commands
+        boolean off();
+        boolean pourWater();
+        boolean stopPouringWater();
+        boolean coolDown();
+        boolean boil();
+        boolean makeSteam();
 
-        void setCommand(String);
-        String getCommand();
+        // Getters
+        String          getCommand();
+        boolean         getPumpState();
+        boolean         getBoilerState();
+        temp_t          getTemp();
+        temp_t          getTargetTemp();
+        toggle_state_t  getToggleState();
 
-        boolean getPumpState();
-
-        boolean getBoilerState();
-        temp_t getTemp();
-        temp_t getTargetTemp();
-
-        toggle_state_t getToggleState();
-
+        // Update states
         void update();
 };
 

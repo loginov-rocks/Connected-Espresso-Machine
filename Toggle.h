@@ -26,10 +26,12 @@ class Toggle {
     private:
         int _pin;
         toggle_state_t _lastState;
+        boolean _toggled;
 
     public:
         Toggle(int);
         toggle_state_t getState();
+        boolean isToggled();
 };
 
 #endif

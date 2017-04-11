@@ -6,46 +6,82 @@
 
 #include "Coffeemaker.h"
 
+void Coffeemaker::setCommand(String command) {
+    _command = command;
+}
+
 Coffeemaker::Coffeemaker(int pumpPin, int boilerPin, int isBoilingPin, int isSteamPin, int togglePin) :
     _pump(pumpPin),
     _boiler(boilerPin, isBoilingPin, isSteamPin),
     _toggle(togglePin) {
-    off();
+    setCommand("off");
 }
 
-void Coffeemaker::off() {
-    stopPouringWater();
-    coolDown();
-    setCommand(__FUNCTION__);
-}
+boolean Coffeemaker::off() {
+    if (getToggleState() != OFF) {
+        return false;
+    }
 
-void Coffeemaker::pourWater() {
-    _pump.on();
-    setCommand(__FUNCTION__);
-}
-
-void Coffeemaker::stopPouringWater() {
     _pump.off();
-    setCommand( __FUNCTION__);
-}
-
-void Coffeemaker::coolDown() {
     _boiler.setTargetTemp(COLD);
+
     setCommand(__FUNCTION__);
+    return true;
 }
 
-void Coffeemaker::boil() {
+boolean Coffeemaker::pourWater() {
+    if (getToggleState() != OFF) {
+        return false;
+    }
+
+    _pump.on();
+
+    setCommand(__FUNCTION__);
+    return true;
+}
+
+boolean Coffeemaker::stopPouringWater() {
+    if (getToggleState() != OFF) {
+        return false;
+    }
+
+    _pump.off();
+
+    setCommand(__FUNCTION__);
+    return true;
+}
+
+boolean Coffeemaker::coolDown() {
+    if (getToggleState() != OFF) {
+        return false;
+    }
+
+    _boiler.setTargetTemp(COLD);
+
+    setCommand(__FUNCTION__);
+    return true;
+}
+
+boolean Coffeemaker::boil() {
+    if (getToggleState() != OFF) {
+        return false;
+    }
+
     _boiler.setTargetTemp(BOILING);
+
     setCommand(__FUNCTION__);
+    return true;
 }
 
-void Coffeemaker::makeSteam() {
+boolean Coffeemaker::makeSteam() {
+    if (getToggleState() != OFF) {
+        return false;
+    }
+
     _boiler.setTargetTemp(STEAM);
-    setCommand(__FUNCTION__);
-}
 
-void Coffeemaker::setCommand(String command) {
-    _command = command;
+    setCommand(__FUNCTION__);
+    return true;
 }
 
 String Coffeemaker::getCommand() {
@@ -73,25 +109,32 @@ toggle_state_t Coffeemaker::getToggleState() {
 }
 
 void Coffeemaker::update() {
-    switch (_toggle.getState()) {
-        case BOIL:
-            stopPouringWater();
-            boil();
-            break;
+    toggle_state_t toggleState = getToggleState();
 
-        case MAKE_STEAM:
-            stopPouringWater();
-            makeSteam();
-            break;
+    if (_toggle.isToggled()) {
+        switch (toggleState) {
+            case BOIL:
+                _pump.off();
+                _boiler.setTargetTemp(BOILING);
+                setCommand("boil");
+                break;
 
-        case POUR_WATER:
-            coolDown();
-            pourWater();
-            break;
+            case MAKE_STEAM:
+                _pump.off();
+                _boiler.setTargetTemp(STEAM);
+                setCommand("makeSteam");
+                break;
 
-        default:
-            off();
-            break;
+            case POUR_WATER:
+                _pump.on();
+                _boiler.setTargetTemp(COLD);
+                setCommand("pourWater");
+                break;
+
+            default:
+                off();
+                break;
+        }
     }
 
     _boiler.update();

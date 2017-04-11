@@ -29,6 +29,52 @@ void setup() {
 }
 
 void loop() {
+    // Get user's input and try to execute requested command
+    if (Serial.available()) {
+        int userInput = Serial.read();
+
+        boolean isCommandCorrect = true;
+        String userCommand;
+        boolean result;
+
+        switch (userInput) {
+            case '0':
+                result = coffeemaker.off();
+                userCommand = "off";
+                break;
+            case '1':
+                result = coffeemaker.pourWater();
+                userCommand = "pour water";
+                break;
+            case '2':
+                result = coffeemaker.stopPouringWater();
+                userCommand = "stop pouring water";
+                break;
+            case '3':
+                result = coffeemaker.coolDown();
+                userCommand = "cool down";
+                break;
+            case '4':
+                result = coffeemaker.boil();
+                userCommand = "boil";
+                break;
+            case '5':
+                result = coffeemaker.makeSteam();
+                userCommand = "make steam";
+                break;
+            default:
+                isCommandCorrect = false;
+                break;
+        }
+
+        if (isCommandCorrect) {
+            Serial.print("Try to ");
+            Serial.print(userCommand);
+            Serial.print(": ");
+            Serial.println(result ? "success" : "fail");
+        }
+    }
+
     String command = coffeemaker.getCommand();
 
     // Print message only if coffeemaker command changes

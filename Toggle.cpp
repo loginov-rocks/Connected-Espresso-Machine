@@ -11,26 +11,45 @@ Toggle::Toggle(int pin) {
     pinMode(_pin, INPUT);
 
     _lastState = OFF;
+    _toggled = false;
 }
 
 toggle_state_t Toggle::getState() {
     int reading = analogRead(_pin);
+    toggle_state_t state;
 
     if (reading < TOGGLE_OFF_READING + TOGGLE_READING_DEVIATION) {
-        _lastState = OFF;
+        state = OFF;
     }
     else if (reading > TOGGLE_POUR_WATER_READING - TOGGLE_READING_DEVIATION) {
-        _lastState = POUR_WATER;
+        state = POUR_WATER;
     }
     else if (reading > TOGGLE_BOIL_READING - TOGGLE_READING_DEVIATION &&
              reading < TOGGLE_BOIL_READING + TOGGLE_READING_DEVIATION) {
-        _lastState = BOIL;
+        state = BOIL;
     }
-    else if (reading > TOGGLE_MAKE_STEAM_READING - TOGGLE_MAKE_STEAM_READING &&
-             reading < TOGGLE_MAKE_STEAM_READING + TOGGLE_MAKE_STEAM_READING) {
-        _lastState = MAKE_STEAM;
+    else if (reading > TOGGLE_MAKE_STEAM_READING - TOGGLE_READING_DEVIATION &&
+             reading < TOGGLE_MAKE_STEAM_READING + TOGGLE_READING_DEVIATION) {
+        state = MAKE_STEAM;
+    }
+    else {
+        return _lastState;
+    }
+
+    if (state != _lastState) {
+        _lastState = state;
+        _toggled = true;
     }
 
     return _lastState;
+}
+
+boolean Toggle::isToggled() {
+    if (!_toggled) {
+        return false;
+    }
+
+    _toggled = false;
+    return true;
 }
 
