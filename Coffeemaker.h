@@ -16,14 +16,16 @@ class Coffeemaker {
         Relay   _pump;
         Boiler  _boiler;
         Toggle  _toggle;
+        int     _donePin;
 
-        String _command;
+        String  _command;
+        boolean _isDone;
 
         void setCommand(String);
 
     public:
         // Constructor
-        Coffeemaker(int, int, int, int, int);
+        Coffeemaker(int, int, int, int, int, int);
 
         // Commands
         boolean off();

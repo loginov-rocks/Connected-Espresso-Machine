@@ -10,10 +10,15 @@ void Coffeemaker::setCommand(String command) {
     _command = command;
 }
 
-Coffeemaker::Coffeemaker(int pumpPin, int boilerPin, int isBoilingPin, int isSteamPin, int togglePin) :
+Coffeemaker::Coffeemaker(int pumpPin, int boilerPin, int isBoilingPin, int isSteamPin, int togglePin, int donePin) :
     _pump(pumpPin),
     _boiler(boilerPin, isBoilingPin, isSteamPin),
     _toggle(togglePin) {
+
+    _donePin = donePin;
+    pinMode(_donePin, OUTPUT);
+    digitalWrite(_donePin, LOW);
+
     setCommand("off");
 }
 
@@ -109,6 +114,8 @@ toggle_state_t Coffeemaker::getToggleState() {
 }
 
 void Coffeemaker::update() {
+
+    // Get toggle state and execute command if it has been toggled
     toggle_state_t toggleState = getToggleState();
 
     if (_toggle.isToggled()) {
@@ -137,6 +144,12 @@ void Coffeemaker::update() {
         }
     }
 
+    // Update boiler state, toggle heating depending on demands
     _boiler.update();
+
+    // Indicate commands execution by done LED
+    _isDone = (getTargetTemp() != COLD && getTemp() == getTargetTemp());
+    digitalWrite(_donePin, _isDone);
+
 }
 
