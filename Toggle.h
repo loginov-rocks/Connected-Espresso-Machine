@@ -14,6 +14,7 @@
 #define TOGGLE_MAKE_STEAM_READING   614
 #define TOGGLE_POUR_WATER_READING   1023
 #define TOGGLE_READING_DEVIATION    50
+#define TOGGLE_DEBOUNCE_TIMEOUT     100
 
 typedef enum {
     OFF,
@@ -26,6 +27,7 @@ class Toggle {
     private:
         int _pin;
         toggle_state_t _lastState;
+        long _lastReading;
         boolean _toggled;
 
     public:
