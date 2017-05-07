@@ -18,8 +18,10 @@ class Coffeemaker {
         Toggle  _toggle;
         int     _donePin;
 
-        String  _command;
-        boolean _isDone;
+        String          _command;
+        boolean         _isDone;
+        long            _millisLeftToMakeCoffee;
+        unsigned long   _pourWaterStartMillis;
 
         void setCommand(String);
 
@@ -34,6 +36,7 @@ class Coffeemaker {
         boolean coolDown();
         boolean boil();
         boolean makeSteam();
+        boolean makeCoffee(int);
 
         // Getters
         String          getCommand();

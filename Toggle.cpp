@@ -11,13 +11,13 @@ Toggle::Toggle(int pin) {
     pinMode(_pin, INPUT);
 
     _lastState = OFF;
-    _lastReading = 0;
+    _lastReadingMillis = 0;
     _toggled = false;
 }
 
 toggle_state_t Toggle::getState() {
-    if (_lastReading + TOGGLE_DEBOUNCE_TIMEOUT < millis()) {
-        _lastReading = millis();
+    if (_lastReadingMillis + TOGGLE_DEBOUNCE_TIMEOUT < millis()) {
+        _lastReadingMillis = millis();
 
         int reading = analogRead(_pin);
         toggle_state_t state;

@@ -27,7 +27,7 @@ class Toggle {
     private:
         int _pin;
         toggle_state_t _lastState;
-        long _lastReading;
+        unsigned long _lastReadingMillis;
         boolean _toggled;
 
     public:

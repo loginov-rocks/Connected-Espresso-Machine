@@ -8,6 +8,12 @@
 
 void Coffeemaker::setCommand(String command) {
     _command = command;
+
+    // Reset metrics related to making coffee command
+    if (_command != "makeCoffee") {
+        _millisLeftToMakeCoffee = 0;
+        _pourWaterStartMillis = 0;
+    }
 }
 
 Coffeemaker::Coffeemaker(int pumpPin, int boilerPin, int isBoilingPin, int isSteamPin, int togglePin, int donePin) :
@@ -89,6 +95,21 @@ boolean Coffeemaker::makeSteam() {
     return true;
 }
 
+boolean Coffeemaker::makeCoffee(int seconds) {
+    if (seconds <= 0 || getToggleState() != OFF) {
+        return false;
+    }
+
+    _pump.off();
+    _boiler.setTargetTemp(BOILING);
+
+    _millisLeftToMakeCoffee = (long) seconds * 1000;
+    _pourWaterStartMillis = 0;
+
+    setCommand(__FUNCTION__);
+    return true;
+}
+
 String Coffeemaker::getCommand() {
     return _command;
 }
@@ -147,8 +168,47 @@ void Coffeemaker::update() {
     // Update boiler state, toggle heating depending on demands
     _boiler.update();
 
+    // Making coffee
+    if (_millisLeftToMakeCoffee > 0) {
+
+        // Water pouring has been already started
+        if (_pourWaterStartMillis > 0) {
+
+            // Time to make coffee is over
+            if (_pourWaterStartMillis + _millisLeftToMakeCoffee < millis()) {
+                _pump.off();
+                _boiler.setTargetTemp(COLD);
+                _millisLeftToMakeCoffee = 0;
+                _pourWaterStartMillis = 0;
+            }
+
+            // Temperature is not suitable, suspend making coffee and update left time
+            else if (getTemp() != BOILING) {
+                _pump.off();
+                _millisLeftToMakeCoffee -= millis() - _pourWaterStartMillis;
+                _pourWaterStartMillis = 0;
+            }
+
+        }
+
+        // Suitable temperature, start to pour water
+        else if (getTemp() == BOILING) {
+            _pump.on();
+            _pourWaterStartMillis = millis();
+        }
+
+    }
+
     // Indicate commands execution by done LED
-    _isDone = (getTargetTemp() != COLD && getTemp() == getTargetTemp());
+    _isDone = false;
+    if (getCommand() == "makeCoffee") {
+        if (_millisLeftToMakeCoffee == 0) {
+            _isDone = true;
+        }
+    }
+    else if (getTargetTemp() != COLD && getTemp() == getTargetTemp()) {
+        _isDone = true;
+    }
     digitalWrite(_donePin, _isDone);
 
 }

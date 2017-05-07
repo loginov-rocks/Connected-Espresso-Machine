@@ -64,6 +64,10 @@ void loop() {
                 result = coffeemaker.makeSteam();
                 userCommand = "make steam";
                 break;
+            case '6':
+                result = coffeemaker.makeCoffee(60);
+                userCommand = "make coffee for 60 seconds";
+                break;
             default:
                 isCommandCorrect = false;
                 break;
