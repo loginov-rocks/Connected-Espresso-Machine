@@ -90,6 +90,11 @@ void loop() {
         Serial.println(command);
     }
 
+    if (command == "makeCoffee") {
+        Serial.print("Milliseconds left to make coffee: ");
+        Serial.println(coffeemaker.getMillisLeftToMakeCoffee());
+    }
+
     coffeemaker.update();
 }
 

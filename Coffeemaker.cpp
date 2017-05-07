@@ -134,6 +134,14 @@ toggle_state_t Coffeemaker::getToggleState() {
     return _toggle.getState();
 }
 
+long Coffeemaker::getMillisLeftToMakeCoffee() {
+    if (_pourWaterStartMillis > 0) {
+        return _millisLeftToMakeCoffee - millis() + _pourWaterStartMillis;
+    }
+
+    return _millisLeftToMakeCoffee;
+}
+
 void Coffeemaker::update() {
 
     // Get toggle state and execute command if it has been toggled
