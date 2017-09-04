@@ -46,6 +46,7 @@ class Coffeemaker {
         temp_t          getTargetTemp();
         toggle_state_t  getToggleState();
         long            getMillisLeftToMakeCoffee();
+        boolean         isDone();
 
         // Update states
         void update();

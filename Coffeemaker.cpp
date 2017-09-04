@@ -142,6 +142,16 @@ long Coffeemaker::getMillisLeftToMakeCoffee() {
     return _millisLeftToMakeCoffee;
 }
 
+boolean Coffeemaker::isDone() {
+    if (getCommand() == "makeCoffee" && _isDone) {
+        off();
+        _isDone = false;
+        return true;
+    }
+
+    return _isDone;
+}
+
 void Coffeemaker::update() {
 
     // Get toggle state and execute command if it has been toggled
