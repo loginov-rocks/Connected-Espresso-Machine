@@ -4,6 +4,7 @@
  * https://github.com/1oginov/Arduino-Coffeemaker
  */
 
+#include <Arduino.h>
 #include "Coffeemaker.h"
 
 #define SERIAL_BAUDRATE         9600

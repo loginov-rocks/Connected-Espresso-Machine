@@ -1,0 +1,11 @@
+{
+    
+    "editor.rulers": [
+        120
+    ],
+    "editor.tabSize": 4,
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Users\\login\\.platformio\\penv\\Scripts;C:\\Users\\login\\.platformio\\penv;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;%NVM_HOME%;%NVM_SYMLINK%;C:\\Users\\login\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Tools\\nvm;C:\\Tools\\nodejs;C:\\Users\\login\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;%NVM_HOME%;%NVM_SYMLINK%;C:\\Users\\login\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Tools\\nvm;C:\\Tools\\nodejs;C:\\Users\\login\\AppData\\Local\\Programs\\Microsoft VS Code\\bin",
+        "PLATFORMIO_CALLER": "vscode"
+    }
+}
