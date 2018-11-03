@@ -1,60 +1,70 @@
-/**
- * Arduino Coffemaker — Toggle class implementation
- * Created by Danila Loginov, December 26, 2016
- * https://github.com/1oginov/Arduino-Coffeemaker
- */
-
 #include "Toggle.h"
 
-Toggle::Toggle(int pin) {
-    _pin = pin;
-    pinMode(_pin, INPUT);
-
-    _lastState = OFF;
-    _lastReadingMillis = 0;
-    _toggled = false;
+boolean inBounds(int value, int target, int deviation)
+{
+    return (value > target - deviation) && (value < target + deviation);
 }
 
-toggle_state_t Toggle::getState() {
-    if (_lastReadingMillis + TOGGLE_DEBOUNCE_TIMEOUT < millis()) {
-        _lastReadingMillis = millis();
+Toggle::Toggle(int pin)
+{
+    // Configure pin.
+    _pin = pin;
+    pinMode(_pin, INPUT);
+}
+
+toggle_state_t Toggle::getState()
+{
+    unsigned long _millis = millis();
+
+    // Debounce by time.
+    if (_lastReadingMillis + TOGGLE_DEBOUNCE_TIMEOUT < _millis)
+    {
+        _lastReadingMillis = _millis;
 
         int reading = analogRead(_pin);
         toggle_state_t state;
 
-        if (reading < TOGGLE_OFF_READING + TOGGLE_READING_DEVIATION) {
+        if (inBounds(reading, TOGGLE_OFF_READING, TOGGLE_READING_DEVIATION))
+        {
             state = OFF;
         }
-        else if (reading > TOGGLE_POUR_WATER_READING - TOGGLE_READING_DEVIATION) {
-            state = POUR_WATER;
-        }
-        else if (reading > TOGGLE_BOIL_READING - TOGGLE_READING_DEVIATION &&
-                 reading < TOGGLE_BOIL_READING + TOGGLE_READING_DEVIATION) {
+        else if (inBounds(reading, TOGGLE_BOIL_READING, TOGGLE_READING_DEVIATION))
+        {
             state = BOIL;
         }
-        else if (reading > TOGGLE_MAKE_STEAM_READING - TOGGLE_READING_DEVIATION &&
-                 reading < TOGGLE_MAKE_STEAM_READING + TOGGLE_READING_DEVIATION) {
+        else if (inBounds(reading, TOGGLE_MAKE_STEAM_READING, TOGGLE_READING_DEVIATION))
+        {
             state = MAKE_STEAM;
         }
-        else {
+        else if (inBounds(reading, TOGGLE_POUR_WATER_READING, TOGGLE_READING_DEVIATION))
+        {
+            state = POUR_WATER;
+        }
+        else
+        {
             return _lastState;
         }
 
-        if (state != _lastState) {
+        // If the state has been updated, remember it and flag that it has been toggled.
+        if (state != _lastState)
+        {
             _lastState = state;
-            _toggled = true;
+            _isToggled = true;
         }
     }
 
     return _lastState;
 }
 
-boolean Toggle::isToggled() {
-    if (!_toggled) {
+// One-time getter to know if the toggle has been toggled.
+boolean Toggle::isToggled()
+{
+    if (!_isToggled)
+    {
         return false;
     }
 
-    _toggled = false;
+    _isToggled = false;
+
     return true;
 }
-

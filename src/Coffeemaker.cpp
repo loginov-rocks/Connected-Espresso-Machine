@@ -184,7 +184,7 @@ void Coffeemaker::update() {
     }
 
     // Update boiler state, toggle heating depending on demands
-    _boiler.update();
+    _boiler.work();
 
     // Making coffee
     if (_millisLeftToMakeCoffee > 0) {

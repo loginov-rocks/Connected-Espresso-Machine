@@ -1,30 +1,31 @@
-/**
- * Arduino Coffemaker — Relay class implementation
- * Created by Danila Loginov, December 25, 2016
- * https://github.com/1oginov/Arduino-Coffeemaker
- */
-
 #include "Relay.h"
 
-Relay::Relay(int pin) {
+Relay::Relay(int pin)
+{
+    // Configure pin.
     _pin = pin;
     pinMode(_pin, OUTPUT);
-    digitalWrite(_pin, LOW);
+
+    // Off on init.
+    off();
 }
 
-boolean Relay::getState() {
+boolean Relay::getState()
+{
     return digitalRead(_pin);
 }
 
-void Relay::on() {
+void Relay::on()
+{
     digitalWrite(_pin, HIGH);
 }
 
-void Relay::off() {
+void Relay::off()
+{
     digitalWrite(_pin, LOW);
 }
 
-void Relay::toggle() {
+void Relay::toggle()
+{
     digitalWrite(_pin, !getState());
 }
-
