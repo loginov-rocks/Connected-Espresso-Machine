@@ -3,18 +3,6 @@
 
 #include "Arduino.h"
 
-// States thresholds are analog readings from pin.
-#define TOGGLE_OFF_READING 0
-#define TOGGLE_BOIL_READING 330
-#define TOGGLE_MAKE_STEAM_READING 614
-#define TOGGLE_POUR_WATER_READING 950
-
-// Tolerance from threshold.
-#define TOGGLE_READING_DEVIATION 50
-
-// Milliseconds to prevent chatter.
-#define TOGGLE_DEBOUNCE_TIMEOUT 100
-
 typedef enum
 {
   OFF,
@@ -27,12 +15,44 @@ class Toggle
 {
 private:
   int _pin;
+
+  // States thresholds are analog readings from pin.
+  int _offReading = 0;
+  int _boilReading = 330;
+  int _makeSteamReading = 614;
+  int _pourWaterReading = 950;
+
+  // Tolerance from threshold.
+  int _readingDeviation = 50;
+
+  // Milliseconds to prevent chatter.
+  int _debounceTimeout = 100;
+
+  boolean _inBounds(int, int);
+
   toggle_state_t _lastState = OFF;
   unsigned long _lastReadingMillis = 0;
   boolean _isToggled = false;
 
 public:
   Toggle(int);
+
+  // Getters.
+  int getOffReading();
+  int getBoilReading();
+  int getMakeSteamReading();
+  int getPourWaterReading();
+  int getReadingDeviation();
+  int getDebounceTimeout();
+
+  // Setters.
+  void setOffReading(int);
+  void setBoilReading(int);
+  void setMakeSteamReading(int);
+  void setPourWaterReading(int);
+  void setReadingDeviation(int);
+  void setDebounceTimeout(int);
+
   toggle_state_t getState();
   boolean isToggled();
 };

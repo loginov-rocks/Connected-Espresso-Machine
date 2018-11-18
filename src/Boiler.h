@@ -8,21 +8,26 @@ typedef enum
   COLD,
   BOILING,
   STEAM
-} temp_t;
+} boiler_temp_t;
 
 class Boiler : private Relay
 {
 private:
   int _isBoilingPin;
   int _isSteamPin;
-  temp_t _targetTemp = COLD;
+  boiler_temp_t _targetTemp = COLD;
 
 public:
   Boiler(int, int, int);
+
+  // Getters.
   boolean getState();
-  temp_t getTemp();
-  temp_t getTargetTemp();
-  void setTargetTemp(temp_t);
+  boiler_temp_t getTemp();
+  boiler_temp_t getTargetTemp();
+
+  // Setters.
+  void setTargetTemp(boiler_temp_t);
+
   void work();
 };
 

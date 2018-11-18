@@ -1,0 +1,71 @@
+@startuml Class
+
+class Relay
+{
+    boolean getState()
+
+    void on()
+    void off()
+    void toggle()
+}
+
+enum boiler_temp_t
+{
+    COLD
+    BOILING
+    STEAM
+}
+
+class Boiler
+{
+    boolean getState()
+    boiler_temp_t getTemp()
+    boiler_temp_t getTargetTemp()
+
+    void setTargetTemp(boiler_temp_t)
+
+    void work()
+}
+
+enum toggle_state_t
+{
+    OFF
+    BOIL
+    MAKE_STEAM
+    POUR_WATER
+}
+
+class Toggle
+{
+    int getOffReading()
+    int getBoilReading()
+    int getMakeSteamReading()
+    int getPourWaterReading()
+    int getReadingDeviation()
+    int getDebounceTimeout()
+
+    void setOffReading(int)
+    void setBoilReading(int)
+    void setMakeSteamReading(int)
+    void setPourWaterReading(int)
+    void setReadingDeviation(int)
+    void setDebounceTimeout(int)
+
+    toggle_state_t getState()
+    boolean isToggled()
+}
+
+class Coffeemaker
+{
+}
+
+Boiler <|-- Relay
+Boiler *-- boiler_temp_t
+
+Toggle *-- toggle_state_t
+
+Coffeemaker *-- Relay: pump
+Coffeemaker *-- Boiler: boiler
+Coffeemaker *-- Toggle: toggle
+
+@enduml

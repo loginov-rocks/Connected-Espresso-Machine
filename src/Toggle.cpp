@@ -1,10 +1,5 @@
 #include "Toggle.h"
 
-boolean inBounds(int value, int target, int deviation)
-{
-    return (value > target - deviation) && (value < target + deviation);
-}
-
 Toggle::Toggle(int pin)
 {
     // Configure pin.
@@ -12,31 +7,66 @@ Toggle::Toggle(int pin)
     pinMode(_pin, INPUT);
 }
 
+boolean Toggle::_inBounds(int value, int target)
+{
+    return (value > target - _readingDeviation) && (value < target + _readingDeviation);
+}
+
+int Toggle::getOffReading()
+{
+    return _offReading;
+}
+
+int Toggle::getBoilReading()
+{
+    return _boilReading;
+}
+
+int Toggle::getMakeSteamReading()
+{
+    return _makeSteamReading;
+}
+
+int Toggle::getPourWaterReading()
+{
+    return _pourWaterReading;
+}
+
+int Toggle::getReadingDeviation()
+{
+    return _readingDeviation;
+}
+
+int Toggle::getDebounceTimeout()
+{
+    return _debounceTimeout;
+}
+
 toggle_state_t Toggle::getState()
 {
     unsigned long _millis = millis();
 
     // Debounce by time.
-    if (_lastReadingMillis + TOGGLE_DEBOUNCE_TIMEOUT < _millis)
+    if (_lastReadingMillis + _debounceTimeout < _millis)
     {
         _lastReadingMillis = _millis;
 
         int reading = analogRead(_pin);
         toggle_state_t state;
 
-        if (inBounds(reading, TOGGLE_OFF_READING, TOGGLE_READING_DEVIATION))
+        if (_inBounds(reading, getOffReading()))
         {
             state = OFF;
         }
-        else if (inBounds(reading, TOGGLE_BOIL_READING, TOGGLE_READING_DEVIATION))
+        else if (_inBounds(reading, getBoilReading()))
         {
             state = BOIL;
         }
-        else if (inBounds(reading, TOGGLE_MAKE_STEAM_READING, TOGGLE_READING_DEVIATION))
+        else if (_inBounds(reading, getMakeSteamReading()))
         {
             state = MAKE_STEAM;
         }
-        else if (inBounds(reading, TOGGLE_POUR_WATER_READING, TOGGLE_READING_DEVIATION))
+        else if (_inBounds(reading, getPourWaterReading()))
         {
             state = POUR_WATER;
         }
@@ -67,4 +97,34 @@ boolean Toggle::isToggled()
     _isToggled = false;
 
     return true;
+}
+
+void Toggle::setOffReading(int reading)
+{
+    _offReading = reading;
+}
+
+void Toggle::setBoilReading(int reading)
+{
+    _boilReading = reading;
+}
+
+void Toggle::setMakeSteamReading(int reading)
+{
+    _makeSteamReading = reading;
+}
+
+void Toggle::setPourWaterReading(int reading)
+{
+    _pourWaterReading = reading;
+}
+
+void Toggle::setReadingDeviation(int deviation)
+{
+    _readingDeviation = deviation;
+}
+
+void Toggle::setDebounceTimeout(int timeout)
+{
+    _debounceTimeout = timeout;
 }

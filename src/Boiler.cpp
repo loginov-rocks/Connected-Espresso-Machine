@@ -15,7 +15,7 @@ boolean Boiler::getState()
     return Relay::getState();
 }
 
-temp_t Boiler::getTemp()
+boiler_temp_t Boiler::getTemp()
 {
     // Steam check goes first, because the temp is hotter than when boiling.
     if (digitalRead(_isSteamPin))
@@ -31,20 +31,20 @@ temp_t Boiler::getTemp()
     return COLD;
 }
 
-temp_t Boiler::getTargetTemp()
+boiler_temp_t Boiler::getTargetTemp()
 {
     return _targetTemp;
 }
 
-void Boiler::setTargetTemp(temp_t targetTemp)
+void Boiler::setTargetTemp(boiler_temp_t targetTemp)
 {
     _targetTemp = targetTemp;
 }
 
 void Boiler::work()
 {
-    temp_t temp = getTemp(),
-           targetTemp = getTargetTemp();
+    boiler_temp_t temp = getTemp(),
+                  targetTemp = getTargetTemp();
 
     // Switch relay off if the target temp is achieved.
     if (targetTemp == COLD || temp == targetTemp || (temp == STEAM && targetTemp == BOILING))
