@@ -1,9 +1,3 @@
-/**
- * Arduino Coffemaker — Coffeemaker class header
- * Created by Danila Loginov, December 26, 2016
- * https://github.com/1oginov/Arduino-Coffeemaker
- */
-
 #ifndef Coffeemaker_h
 #define Coffeemaker_h
 
@@ -42,8 +36,8 @@ class Coffeemaker {
         String          getCommand();
         boolean         getPumpState();
         boolean         getBoilerState();
-        temp_t          getTemp();
-        temp_t          getTargetTemp();
+        boiler_temp_t   getTemp();
+        boiler_temp_t   getTargetTemp();
         toggle_state_t  getToggleState();
         long            getMillisLeftToMakeCoffee();
         boolean         isDone();
@@ -53,4 +47,3 @@ class Coffeemaker {
 };
 
 #endif
-

@@ -23,7 +23,7 @@ private:
   int _pourWaterReading = 950;
 
   // Tolerance from threshold.
-  int _readingDeviation = 50;
+  int _readingDeviation = 100;
 
   // Milliseconds to prevent chatter.
   int _debounceTimeout = 100;

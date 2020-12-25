@@ -1,9 +1,3 @@
-/**
- * Arduino Coffemaker — Coffeemaker class implementation
- * Created by Danila Loginov, December 26, 2016
- * https://github.com/1oginov/Arduino-Coffeemaker
- */
-
 #include "Coffeemaker.h"
 
 void Coffeemaker::setCommand(String command) {
@@ -122,11 +116,11 @@ boolean Coffeemaker::getBoilerState() {
     return _boiler.getState();
 }
 
-temp_t Coffeemaker::getTemp() {
+boiler_temp_t Coffeemaker::getTemp() {
     return _boiler.getTemp();
 }
 
-temp_t Coffeemaker::getTargetTemp() {
+boiler_temp_t Coffeemaker::getTargetTemp() {
     return _boiler.getTargetTemp();
 }
 
@@ -230,4 +224,3 @@ void Coffeemaker::update() {
     digitalWrite(_donePin, _isDone);
 
 }
-

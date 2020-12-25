@@ -1,9 +1,3 @@
-/**
- * Arduino Coffemaker
- * Created by Danila Loginov, December 25, 2016
- * https://github.com/1oginov/Arduino-Coffeemaker
- */
-
 #include <Arduino.h>
 #include "Coffeemaker.h"
 
@@ -98,4 +92,3 @@ void loop() {
 
     coffeemaker.update();
 }
-
