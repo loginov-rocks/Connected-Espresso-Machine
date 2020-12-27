@@ -3,15 +3,15 @@
 
 #define SERIAL_BAUDRATE         9600
 
-#define PUMP_RELAY_PIN          2
+#define PUMP_RELAY_PIN          D1
 
-#define BOILER_RELAY_PIN        3
-#define BOILER_IS_BOILING_PIN   A0
-#define BOILER_IS_STEAM_PIN     A1
+#define BOILER_RELAY_PIN        D2
+#define BOILER_IS_BOILING_PIN   D5
+#define BOILER_IS_STEAM_PIN     D6
 
-#define TOGGLE_PIN              A2
+#define TOGGLE_PIN              A0
 
-#define DONE_PIN                4
+#define DONE_PIN                D7
 
 Coffeemaker coffeemaker(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN, DONE_PIN);
 
