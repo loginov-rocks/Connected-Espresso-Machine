@@ -3,31 +3,32 @@
 
 #include "Relay.h"
 
-typedef enum
+enum class BoilerTemp
 {
-  COLD,
-  BOILING,
-  STEAM
-} boiler_temp_t;
+  Cold,
+  Boiling,
+  Steam
+};
 
 class Boiler : private Relay
 {
 private:
-  int _isBoilingPin;
-  int _isSteamPin;
-  boiler_temp_t _targetTemp = COLD;
+  int isBoilingPin;
+  int isSteamPin;
+  BoilerTemp targetTemp = BoilerTemp::Cold;
 
 public:
   Boiler(int, int, int);
 
   // Getters.
   boolean getState();
-  boiler_temp_t getTemp();
-  boiler_temp_t getTargetTemp();
+  BoilerTemp getTemp();
+  BoilerTemp getTargetTemp();
 
   // Setters.
-  void setTargetTemp(boiler_temp_t);
+  void setTargetTemp(BoilerTemp);
 
+  // Processors.
   void work();
 };
 

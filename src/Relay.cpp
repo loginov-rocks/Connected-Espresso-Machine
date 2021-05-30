@@ -1,10 +1,10 @@
 #include "Relay.h"
 
-Relay::Relay(int pin)
+Relay::Relay(int _pin)
 {
     // Configure pin.
-    _pin = pin;
-    pinMode(_pin, OUTPUT);
+    pin = _pin;
+    pinMode(pin, OUTPUT);
 
     // Off on init.
     off();
@@ -12,20 +12,20 @@ Relay::Relay(int pin)
 
 boolean Relay::getState()
 {
-    return digitalRead(_pin);
+    return digitalRead(pin);
 }
 
 void Relay::on()
 {
-    digitalWrite(_pin, HIGH);
+    digitalWrite(pin, HIGH);
 }
 
 void Relay::off()
 {
-    digitalWrite(_pin, LOW);
+    digitalWrite(pin, LOW);
 }
 
 void Relay::toggle()
 {
-    digitalWrite(_pin, !getState());
+    digitalWrite(pin, !getState());
 }

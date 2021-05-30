@@ -5,45 +5,45 @@
 #include "Boiler.h"
 #include "Toggle.h"
 
-class Coffeemaker {
-    private:
-        Relay   _pump;
-        Boiler  _boiler;
-        Toggle  _toggle;
-        int     _donePin;
+class Coffeemaker
+{
+private:
+    Relay pump;
+    Boiler boiler;
+    Toggle toggle;
+    int donePin;
 
-        String          _command;
-        boolean         _isDone;
-        long            _millisLeftToMakeCoffee;
-        unsigned long   _pourWaterStartMillis;
+    String command;
+    boolean isDone;
+    long millisLeftToMakeCoffee;
+    unsigned long pourWaterStartMillis;
 
-        void setCommand(String);
+    void setCommand(String);
 
-    public:
-        // Constructor
-        Coffeemaker(int, int, int, int, int, int);
+public:
+    Coffeemaker(int, int, int, int, int, int);
 
-        // Commands
-        boolean off();
-        boolean pourWater();
-        boolean stopPouringWater();
-        boolean coolDown();
-        boolean boil();
-        boolean makeSteam();
-        boolean makeCoffee(int);
+    // Commands.
+    boolean off();
+    boolean pourWater();
+    boolean stopPouringWater();
+    boolean coolDown();
+    boolean boil();
+    boolean makeSteam();
+    boolean makeCoffee(int);
 
-        // Getters
-        String          getCommand();
-        boolean         getPumpState();
-        boolean         getBoilerState();
-        boiler_temp_t   getTemp();
-        boiler_temp_t   getTargetTemp();
-        toggle_state_t  getToggleState();
-        long            getMillisLeftToMakeCoffee();
-        boolean         isDone();
+    // Getters.
+    String getCommand();
+    boolean getPumpState();
+    boolean getBoilerState();
+    BoilerTemp getTemp();
+    BoilerTemp getTargetTemp();
+    ToggleState getToggleState();
+    long getMillisLeftToMakeCoffee();
+    boolean getIsDone();
 
-        // Update states
-        void update();
+    // Processors.
+    void work();
 };
 
 #endif

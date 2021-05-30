@@ -6,11 +6,15 @@
 class Relay
 {
 private:
-  int _pin;
+  int pin;
 
 public:
   Relay(int);
+
+  // Getters.
   boolean getState();
+
+  // Setters.
   void on();
   void off();
   void toggle();

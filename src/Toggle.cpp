@@ -1,130 +1,130 @@
 #include "Toggle.h"
 
-Toggle::Toggle(int pin)
+boolean Toggle::inBounds(int value, int target)
 {
-    // Configure pin.
-    _pin = pin;
-    pinMode(_pin, INPUT);
+    return (value > target - readingDeviation) && (value < target + readingDeviation);
 }
 
-boolean Toggle::_inBounds(int value, int target)
+Toggle::Toggle(int _pin)
 {
-    return (value > target - _readingDeviation) && (value < target + _readingDeviation);
+    // Configure pin.
+    pin = pin;
+    pinMode(pin, INPUT);
 }
 
 int Toggle::getOffReading()
 {
-    return _offReading;
+    return offReading;
 }
 
 int Toggle::getBoilReading()
 {
-    return _boilReading;
+    return boilReading;
 }
 
 int Toggle::getMakeSteamReading()
 {
-    return _makeSteamReading;
+    return makeSteamReading;
 }
 
 int Toggle::getPourWaterReading()
 {
-    return _pourWaterReading;
+    return pourWaterReading;
 }
 
 int Toggle::getReadingDeviation()
 {
-    return _readingDeviation;
+    return readingDeviation;
 }
 
 int Toggle::getDebounceTimeout()
 {
-    return _debounceTimeout;
+    return debounceTimeout;
 }
 
-toggle_state_t Toggle::getState()
+ToggleState Toggle::getState()
 {
     unsigned long _millis = millis();
 
     // Debounce by time.
-    if (_lastReadingMillis + _debounceTimeout < _millis)
+    if (lastReadingMillis + debounceTimeout < _millis)
     {
-        _lastReadingMillis = _millis;
+        lastReadingMillis = _millis;
 
-        int reading = analogRead(_pin);
-        toggle_state_t state;
+        int reading = analogRead(pin);
+        ToggleState state;
 
-        if (_inBounds(reading, getOffReading()))
+        if (inBounds(reading, getOffReading()))
         {
-            state = OFF;
+            state = ToggleState::Off;
         }
-        else if (_inBounds(reading, getBoilReading()))
+        else if (inBounds(reading, getBoilReading()))
         {
-            state = BOIL;
+            state = ToggleState::Boil;
         }
-        else if (_inBounds(reading, getMakeSteamReading()))
+        else if (inBounds(reading, getMakeSteamReading()))
         {
-            state = MAKE_STEAM;
+            state = ToggleState::MakeSteam;
         }
-        else if (_inBounds(reading, getPourWaterReading()))
+        else if (inBounds(reading, getPourWaterReading()))
         {
-            state = POUR_WATER;
+            state = ToggleState::PourWater;
         }
         else
         {
-            return _lastState;
+            return lastState;
         }
 
         // If the state has been updated, remember it and flag that it has been toggled.
-        if (state != _lastState)
+        if (state != lastState)
         {
-            _lastState = state;
-            _isToggled = true;
+            lastState = state;
+            isToggled = true;
         }
     }
 
-    return _lastState;
+    return lastState;
 }
 
 // One-time getter to know if the toggle has been toggled.
-boolean Toggle::isToggled()
+boolean Toggle::getIsToggled()
 {
-    if (!_isToggled)
+    if (!isToggled)
     {
         return false;
     }
 
-    _isToggled = false;
+    isToggled = false;
 
     return true;
 }
 
 void Toggle::setOffReading(int reading)
 {
-    _offReading = reading;
+    offReading = reading;
 }
 
 void Toggle::setBoilReading(int reading)
 {
-    _boilReading = reading;
+    boilReading = reading;
 }
 
 void Toggle::setMakeSteamReading(int reading)
 {
-    _makeSteamReading = reading;
+    makeSteamReading = reading;
 }
 
 void Toggle::setPourWaterReading(int reading)
 {
-    _pourWaterReading = reading;
+    pourWaterReading = reading;
 }
 
 void Toggle::setReadingDeviation(int deviation)
 {
-    _readingDeviation = deviation;
+    readingDeviation = deviation;
 }
 
 void Toggle::setDebounceTimeout(int timeout)
 {
-    _debounceTimeout = timeout;
+    debounceTimeout = timeout;
 }

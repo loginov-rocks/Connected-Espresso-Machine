@@ -3,36 +3,36 @@
 
 #include "Arduino.h"
 
-typedef enum
+enum class ToggleState
 {
-  OFF,
-  BOIL,
-  MAKE_STEAM,
-  POUR_WATER
-} toggle_state_t;
+  Off,
+  Boil,
+  MakeSteam,
+  PourWater
+};
 
 class Toggle
 {
 private:
-  int _pin;
+  int pin;
 
-  // States thresholds are analog readings from pin.
-  int _offReading = 0;
-  int _boilReading = 330;
-  int _makeSteamReading = 614;
-  int _pourWaterReading = 950;
+  // States thresholds are analog readings from pins.
+  int offReading = 0;
+  int boilReading = 330;
+  int makeSteamReading = 614;
+  int pourWaterReading = 950;
 
-  // Tolerance from threshold.
-  int _readingDeviation = 100;
+  // Tolerance from the threshold.
+  int readingDeviation = 100;
 
   // Milliseconds to prevent chatter.
-  int _debounceTimeout = 100;
+  int debounceTimeout = 100;
 
-  boolean _inBounds(int, int);
+  ToggleState lastState = ToggleState::Off;
+  unsigned long lastReadingMillis = 0;
+  boolean isToggled = false;
 
-  toggle_state_t _lastState = OFF;
-  unsigned long _lastReadingMillis = 0;
-  boolean _isToggled = false;
+  boolean inBounds(int, int);
 
 public:
   Toggle(int);
@@ -44,6 +44,8 @@ public:
   int getPourWaterReading();
   int getReadingDeviation();
   int getDebounceTimeout();
+  ToggleState getState();
+  boolean getIsToggled();
 
   // Setters.
   void setOffReading(int);
@@ -52,9 +54,6 @@ public:
   void setPourWaterReading(int);
   void setReadingDeviation(int);
   void setDebounceTimeout(int);
-
-  toggle_state_t getState();
-  boolean isToggled();
 };
 
 #endif

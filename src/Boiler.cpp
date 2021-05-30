@@ -1,13 +1,13 @@
 #include "Boiler.h"
 
-Boiler::Boiler(int relayPin, int isBoilingPin, int isSteamPin) : Relay(relayPin)
+Boiler::Boiler(int relayPin, int _isBoilingPin, int _isSteamPin) : Relay(relayPin)
 {
     // Configure pins.
-    _isBoilingPin = isBoilingPin;
-    _isSteamPin = isSteamPin;
+    isBoilingPin = _isBoilingPin;
+    isSteamPin = _isSteamPin;
 
-    pinMode(_isBoilingPin, INPUT_PULLUP);
-    pinMode(_isSteamPin, INPUT_PULLUP);
+    pinMode(isBoilingPin, INPUT_PULLUP);
+    pinMode(isSteamPin, INPUT_PULLUP);
 }
 
 boolean Boiler::getState()
@@ -15,39 +15,39 @@ boolean Boiler::getState()
     return Relay::getState();
 }
 
-boiler_temp_t Boiler::getTemp()
+BoilerTemp Boiler::getTemp()
 {
-    // Steam check goes first, because the temp is hotter than when boiling.
-    if (digitalRead(_isSteamPin))
+    // The steam check goes first because the temp is hotter than when boiling.
+    if (digitalRead(isSteamPin))
     {
-        return STEAM;
+        return BoilerTemp::Steam;
     }
 
-    if (digitalRead(_isBoilingPin))
+    if (digitalRead(isBoilingPin))
     {
-        return BOILING;
+        return BoilerTemp::Boiling;
     }
 
-    return COLD;
+    return BoilerTemp::Cold;
 }
 
-boiler_temp_t Boiler::getTargetTemp()
+BoilerTemp Boiler::getTargetTemp()
 {
-    return _targetTemp;
+    return targetTemp;
 }
 
-void Boiler::setTargetTemp(boiler_temp_t targetTemp)
+void Boiler::setTargetTemp(BoilerTemp _targetTemp)
 {
-    _targetTemp = targetTemp;
+    targetTemp = _targetTemp;
 }
 
 void Boiler::work()
 {
-    boiler_temp_t temp = getTemp(),
-                  targetTemp = getTargetTemp();
+    BoilerTemp temp = getTemp(),
+               targetTemp = getTargetTemp();
 
     // Switch relay off if the target temp is achieved.
-    if (targetTemp == COLD || temp == targetTemp || (temp == STEAM && targetTemp == BOILING))
+    if (targetTemp == BoilerTemp::Cold || temp == targetTemp || (temp == BoilerTemp::Steam && targetTemp == BoilerTemp::Boiling))
     {
         off();
     }
