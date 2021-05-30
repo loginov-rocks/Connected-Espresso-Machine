@@ -24,6 +24,58 @@ Coffeemaker::Coffeemaker(int pumpPin, int boilerPin, int isBoilingPin, int isSte
     setCommand("off");
 }
 
+String Coffeemaker::getCommand()
+{
+    return command;
+}
+
+boolean Coffeemaker::getPumpState()
+{
+    return pump.getState();
+}
+
+boolean Coffeemaker::getBoilerState()
+{
+    return boiler.getState();
+}
+
+BoilerTemp Coffeemaker::getTemp()
+{
+    return boiler.getTemp();
+}
+
+BoilerTemp Coffeemaker::getTargetTemp()
+{
+    return boiler.getTargetTemp();
+}
+
+ToggleState Coffeemaker::getToggleState()
+{
+    return toggle.getState();
+}
+
+long Coffeemaker::getMillisLeftToMakeCoffee()
+{
+    if (pourWaterStartMillis > 0)
+    {
+        return millisLeftToMakeCoffee - millis() + pourWaterStartMillis;
+    }
+
+    return millisLeftToMakeCoffee;
+}
+
+boolean Coffeemaker::getIsDone()
+{
+    if (getCommand() == "makeCoffee" && isDone)
+    {
+        off();
+        isDone = false;
+        return true;
+    }
+
+    return isDone;
+}
+
 boolean Coffeemaker::off()
 {
     if (getToggleState() != ToggleState::Off)
@@ -118,58 +170,6 @@ boolean Coffeemaker::makeCoffee(int seconds)
 
     setCommand(__FUNCTION__);
     return true;
-}
-
-String Coffeemaker::getCommand()
-{
-    return command;
-}
-
-boolean Coffeemaker::getPumpState()
-{
-    return pump.getState();
-}
-
-boolean Coffeemaker::getBoilerState()
-{
-    return boiler.getState();
-}
-
-BoilerTemp Coffeemaker::getTemp()
-{
-    return boiler.getTemp();
-}
-
-BoilerTemp Coffeemaker::getTargetTemp()
-{
-    return boiler.getTargetTemp();
-}
-
-ToggleState Coffeemaker::getToggleState()
-{
-    return toggle.getState();
-}
-
-long Coffeemaker::getMillisLeftToMakeCoffee()
-{
-    if (pourWaterStartMillis > 0)
-    {
-        return millisLeftToMakeCoffee - millis() + pourWaterStartMillis;
-    }
-
-    return millisLeftToMakeCoffee;
-}
-
-boolean Coffeemaker::getIsDone()
-{
-    if (getCommand() == "makeCoffee" && isDone)
-    {
-        off();
-        isDone = false;
-        return true;
-    }
-
-    return isDone;
 }
 
 void Coffeemaker::work()

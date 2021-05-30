@@ -14,7 +14,7 @@ public:
   // Getters.
   boolean getState();
 
-  // Setters.
+  // Commands.
   void on();
   void off();
   void toggle();

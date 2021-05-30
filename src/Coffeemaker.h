@@ -23,15 +23,6 @@ private:
 public:
     Coffeemaker(int, int, int, int, int, int);
 
-    // Commands.
-    boolean off();
-    boolean pourWater();
-    boolean stopPouringWater();
-    boolean coolDown();
-    boolean boil();
-    boolean makeSteam();
-    boolean makeCoffee(int);
-
     // Getters.
     String getCommand();
     boolean getPumpState();
@@ -41,6 +32,15 @@ public:
     ToggleState getToggleState();
     long getMillisLeftToMakeCoffee();
     boolean getIsDone();
+
+    // Commands.
+    boolean off();
+    boolean pourWater();
+    boolean stopPouringWater();
+    boolean coolDown();
+    boolean boil();
+    boolean makeSteam();
+    boolean makeCoffee(int);
 
     // Processors.
     void work();
