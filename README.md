@@ -5,7 +5,7 @@
 1. Archeology: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-archeology-part-1-3d8c374b0f32)
 2. Relays: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-relays-part-2-2a070d81ffd2)
 3. Boiler: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-boiler-part-3-db0dcd764f6)
-4. Toggle: Medium
+4. Toggle: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-toggle-part-4-689a737b9f36)
 5. Main Class and Indicators: Medium
 6. Assembly: Medium
 7. to be continued...
@@ -20,3 +20,7 @@
     * [Boiler.h](https://gist.github.com/loginov-rocks/bf00abfa41bdae9f0755f1e1da09a3b7)
     * [Boiler.cpp](https://gist.github.com/loginov-rocks/97928385cdc14b2b8685e260fd0301ec)
     * [main.cpp](https://gist.github.com/loginov-rocks/a6ee1173ae0b32c9ba575e358a4aa1e1)
+* DIY Connected Espresso Machine: Toggle (Part 4)
+    * [Toggle.h](https://gist.github.com/loginov-rocks/c9e36bb92d1792c3f6f7c3f3043665ad)
+    * [Toggle.cpp](https://gist.github.com/loginov-rocks/f31b9a23ab0bc96e5d136551c8843a2f)
+    * [main.cpp](https://gist.github.com/loginov-rocks/ca233d7fce4953092067197c9220e12b)
