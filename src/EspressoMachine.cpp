@@ -1,4 +1,4 @@
-#include "Coffeemaker.h"
+#include "EspressoMachine.h"
 
 void EspressoMachine::setCommand(EspressoMachineCommand command)
 {
@@ -161,7 +161,7 @@ void EspressoMachine::work()
         break;
     }
 
-    // Operate boiler to achieve desired state.
+    // Operate boiler to achieve target state.
     boiler.work();
 
     // Operate "Done" pin to reflect the command state.

@@ -1,4 +1,4 @@
-#include "Coffeemaker.h"
+#include "EspressoMachine.h"
 
 #define SERIAL_BAUDRATE 9600
 
