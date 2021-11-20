@@ -1,71 +1,92 @@
 @startuml Class
 
-class Relay
-{
+class Relay {
     boolean getState()
-
+    ..
     void on()
     void off()
     void toggle()
 }
 
-enum boiler_temp_t
-{
-    COLD
-    BOILING
-    STEAM
+enum BoilerTemp {
+    Cold
+    Boiling
+    Steam
 }
 
-class Boiler
-{
+class Boiler {
     boolean getState()
-    boiler_temp_t getTemp()
-    boiler_temp_t getTargetTemp()
-
-    void setTargetTemp(boiler_temp_t)
-
+    BoilerTemp getTemp()
+    BoilerTemp getTargetTemp()
+    ..
+    void setTargetTemp(BoilerTemp)
+    ..
     void work()
 }
 
-enum toggle_state_t
-{
-    OFF
-    BOIL
-    MAKE_STEAM
-    POUR_WATER
+enum ToggleState {
+    Off
+    Boil
+    MakeSteam
+    PourWater
 }
 
-class Toggle
-{
+class Toggle {
     int getOffReading()
     int getBoilReading()
     int getMakeSteamReading()
     int getPourWaterReading()
     int getReadingDeviation()
     int getDebounceTimeout()
-
+    ..
+    ToggleState getState()
+    boolean getIsToggled()
+    ..
     void setOffReading(int)
     void setBoilReading(int)
     void setMakeSteamReading(int)
     void setPourWaterReading(int)
     void setReadingDeviation(int)
     void setDebounceTimeout(int)
-
-    toggle_state_t getState()
-    boolean isToggled()
 }
 
-class Coffeemaker
-{
+enum EspressoMachineCommand {
+    Off
+    PourWater
+    StopPouringWater
+    Boil
+    MakeSteam
+    CoolDown
+    ToggleBoil
+    ToggleMakeSteam
+    TogglePourWater
 }
 
-Boiler <|-- Relay
-Boiler *-- boiler_temp_t
+class EspressoMachine {
+    boolean getPumpState()
+    boolean getBoilerState()
+    BoilerTemp getBoilerTemp()
+    BoilerTemp getBoilerTargetTemp()
+    ToggleState getToggleState()
+    ..
+    EspressoMachineCommand getCommand()
+    boolean getIsCommandChanged()
+    boolean getIsDone()
+    ..
+    boolean command(EspressoMachineCommand)
+    ..
+    void work()
+}
 
-Toggle *-- toggle_state_t
+Boiler <|- Relay
+Boiler *-- BoilerTemp
 
-Coffeemaker *-- Relay: pump
-Coffeemaker *-- Boiler: boiler
-Coffeemaker *-- Toggle: toggle
+Toggle *-- ToggleState
+
+EspressoMachine *- EspressoMachineCommand
+
+EspressoMachine *-- Relay: pump
+EspressoMachine *-- Boiler: boiler
+EspressoMachine *-- Toggle: toggle
 
 @enduml

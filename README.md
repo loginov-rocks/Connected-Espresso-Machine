@@ -2,6 +2,8 @@
 
 ## Articles
 
+Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-machine-c9576e4bc43a)
+
 1. Archeology: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-archeology-part-1-3d8c374b0f32)
 2. Relays: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-relays-part-2-2a070d81ffd2)
 3. Boiler: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-boiler-part-3-db0dcd764f6)
@@ -9,6 +11,10 @@
 5. Main Class and Indicators: Medium
 6. Assembly: Medium
 7. to be continued...
+
+## Scheme
+
+![Scheme](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Hardware/Schemes/5-Final-NodeMCU.png)
 
 ## Gists
 
