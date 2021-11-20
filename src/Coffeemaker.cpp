@@ -1,260 +1,170 @@
 #include "Coffeemaker.h"
 
-void Coffeemaker::setCommand(String _command)
+void EspressoMachine::setCommand(EspressoMachineCommand command)
 {
-    command = _command;
-
-    // Reset metrics related to making a coffee command.
-    if (command != "makeCoffee")
-    {
-        millisLeftToMakeCoffee = 0;
-        pourWaterStartMillis = 0;
-    }
+    lastCommand = command;
+    isCommandChanged = true;
 }
 
-Coffeemaker::Coffeemaker(int pumpPin, int boilerPin, int isBoilingPin, int isSteamPin, int togglePin, int _donePin) : pump(pumpPin),
-                                                                                                                      boiler(boilerPin, isBoilingPin, isSteamPin),
-                                                                                                                      toggle(togglePin)
+EspressoMachine::EspressoMachine(int pumpPin, int boilerPin, int isBoilingPin, int isSteamPin, int togglePin, int _donePin) : pump(pumpPin),
+                                                                                                                              boiler(boilerPin, isBoilingPin, isSteamPin),
+                                                                                                                              toggle(togglePin)
 {
-
+    // Configure "Done" pin.
     donePin = _donePin;
     pinMode(donePin, OUTPUT);
     digitalWrite(donePin, LOW);
-
-    setCommand("off");
 }
 
-String Coffeemaker::getCommand()
-{
-    return command;
-}
-
-boolean Coffeemaker::getPumpState()
+boolean EspressoMachine::getPumpState()
 {
     return pump.getState();
 }
 
-boolean Coffeemaker::getBoilerState()
+boolean EspressoMachine::getBoilerState()
 {
     return boiler.getState();
 }
 
-BoilerTemp Coffeemaker::getTemp()
+BoilerTemp EspressoMachine::getBoilerTemp()
 {
     return boiler.getTemp();
 }
 
-BoilerTemp Coffeemaker::getTargetTemp()
+BoilerTemp EspressoMachine::getBoilerTargetTemp()
 {
     return boiler.getTargetTemp();
 }
 
-ToggleState Coffeemaker::getToggleState()
+ToggleState EspressoMachine::getToggleState()
 {
     return toggle.getState();
 }
 
-long Coffeemaker::getMillisLeftToMakeCoffee()
+EspressoMachineCommand EspressoMachine::getCommand()
 {
-    if (pourWaterStartMillis > 0)
-    {
-        return millisLeftToMakeCoffee - millis() + pourWaterStartMillis;
-    }
-
-    return millisLeftToMakeCoffee;
+    return lastCommand;
 }
 
-boolean Coffeemaker::getIsDone()
+// One-time getter to know if the command has been changed.
+boolean EspressoMachine::getIsCommandChanged()
 {
-    if (getCommand() == "makeCoffee" && isDone)
+    if (!isCommandChanged)
     {
-        off();
-        isDone = false;
-        return true;
+        return false;
     }
 
+    isCommandChanged = false;
+
+    return true;
+}
+
+boolean EspressoMachine::getIsDone()
+{
     return isDone;
 }
 
-boolean Coffeemaker::off()
+boolean EspressoMachine::command(EspressoMachineCommand command)
 {
+    // Restrict internal commands usage programmatically.
+    if (command == EspressoMachineCommand::ToggleBoil ||
+        command == EspressoMachineCommand::ToggleMakeSteam ||
+        command == EspressoMachineCommand::TogglePourWater)
+    {
+        return false;
+    }
+
+    // Restrict external commands if the toggle is not in the "Off" position.
     if (getToggleState() != ToggleState::Off)
     {
         return false;
     }
 
-    pump.off();
-    boiler.setTargetTemp(BoilerTemp::Cold);
+    setCommand(command);
 
-    setCommand(__FUNCTION__);
     return true;
 }
 
-boolean Coffeemaker::pourWater()
+void EspressoMachine::work()
 {
-    if (getToggleState() != ToggleState::Off)
-    {
-        return false;
-    }
-
-    pump.on();
-
-    setCommand(__FUNCTION__);
-    return true;
-}
-
-boolean Coffeemaker::stopPouringWater()
-{
-    if (getToggleState() != ToggleState::Off)
-    {
-        return false;
-    }
-
-    pump.off();
-
-    setCommand(__FUNCTION__);
-    return true;
-}
-
-boolean Coffeemaker::coolDown()
-{
-    if (getToggleState() != ToggleState::Off)
-    {
-        return false;
-    }
-
-    boiler.setTargetTemp(BoilerTemp::Cold);
-
-    setCommand(__FUNCTION__);
-    return true;
-}
-
-boolean Coffeemaker::boil()
-{
-    if (getToggleState() != ToggleState::Off)
-    {
-        return false;
-    }
-
-    boiler.setTargetTemp(BoilerTemp::Boiling);
-
-    setCommand(__FUNCTION__);
-    return true;
-}
-
-boolean Coffeemaker::makeSteam()
-{
-    if (getToggleState() != ToggleState::Off)
-    {
-        return false;
-    }
-
-    boiler.setTargetTemp(BoilerTemp::Steam);
-
-    setCommand(__FUNCTION__);
-    return true;
-}
-
-boolean Coffeemaker::makeCoffee(int seconds)
-{
-    if (seconds <= 0 || getToggleState() != ToggleState::Off)
-    {
-        return false;
-    }
-
-    pump.off();
-    boiler.setTargetTemp(BoilerTemp::Boiling);
-
-    millisLeftToMakeCoffee = (long)seconds * 1000;
-    pourWaterStartMillis = 0;
-
-    setCommand(__FUNCTION__);
-    return true;
-}
-
-void Coffeemaker::work()
-{
-
-    // Get toggle state and execute a command if it has been toggled.
+    // Get toggle state before checking whether it was toggled to have the flag up to date.
     ToggleState toggleState = getToggleState();
 
+    // Set the command if the toggle has been toggled.
     if (toggle.getIsToggled())
     {
         switch (toggleState)
         {
         case ToggleState::Boil:
-            pump.off();
-            boiler.setTargetTemp(BoilerTemp::Boiling);
-            setCommand("boil");
+            setCommand(EspressoMachineCommand::ToggleBoil);
             break;
 
         case ToggleState::MakeSteam:
-            pump.off();
-            boiler.setTargetTemp(BoilerTemp::Steam);
-            setCommand("makeSteam");
+            setCommand(EspressoMachineCommand::ToggleMakeSteam);
             break;
 
         case ToggleState::PourWater:
-            pump.on();
-            boiler.setTargetTemp(BoilerTemp::Cold);
-            setCommand("pourWater");
+            setCommand(EspressoMachineCommand::TogglePourWater);
             break;
 
+        // Off by default.
         default:
-            off();
+            setCommand(EspressoMachineCommand::Off);
             break;
         }
     }
 
-    // Update boiler state, toggle heating depending on demands.
+    // Operate components based on the command value.
+    switch (lastCommand)
+    {
+    // External commands.
+    case EspressoMachineCommand::PourWater:
+        pump.on();
+        break;
+
+    case EspressoMachineCommand::StopPouringWater:
+        pump.off();
+        break;
+
+    case EspressoMachineCommand::Boil:
+        boiler.setTargetTemp(BoilerTemp::Boiling);
+        break;
+
+    case EspressoMachineCommand::MakeSteam:
+        boiler.setTargetTemp(BoilerTemp::Steam);
+        break;
+
+    case EspressoMachineCommand::CoolDown:
+        boiler.setTargetTemp(BoilerTemp::Cold);
+        break;
+
+    // Internal commands.
+    case EspressoMachineCommand::ToggleBoil:
+        pump.off();
+        boiler.setTargetTemp(BoilerTemp::Boiling);
+        break;
+
+    case EspressoMachineCommand::ToggleMakeSteam:
+        pump.off();
+        boiler.setTargetTemp(BoilerTemp::Steam);
+        break;
+
+    case EspressoMachineCommand::TogglePourWater:
+        pump.on();
+        boiler.setTargetTemp(BoilerTemp::Cold);
+        break;
+
+    // Off by default.
+    default:
+        pump.off();
+        boiler.setTargetTemp(BoilerTemp::Cold);
+        break;
+    }
+
+    // Operate boiler to achieve desired state.
     boiler.work();
 
-    // Making coffee.
-    if (millisLeftToMakeCoffee > 0)
-    {
-
-        // Water pouring has been already started.
-        if (pourWaterStartMillis > 0)
-        {
-
-            // The time to make coffee is over.
-            if (pourWaterStartMillis + millisLeftToMakeCoffee < millis())
-            {
-                pump.off();
-                boiler.setTargetTemp(BoilerTemp::Cold);
-                millisLeftToMakeCoffee = 0;
-                pourWaterStartMillis = 0;
-            }
-
-            // Temperature is not suitable, suspend making coffee and update left time.
-            else if (getTemp() != BoilerTemp::Boiling)
-            {
-                pump.off();
-                millisLeftToMakeCoffee -= millis() - pourWaterStartMillis;
-                pourWaterStartMillis = 0;
-            }
-        }
-
-        // Suitable temperature, start to pour water.
-        else if (getTemp() == BoilerTemp::Boiling)
-        {
-            pump.on();
-            pourWaterStartMillis = millis();
-        }
-    }
-
-    // Indicate commands execution by done LED.
-    isDone = false;
-    if (getCommand() == "makeCoffee")
-    {
-        if (millisLeftToMakeCoffee == 0)
-        {
-            isDone = true;
-        }
-    }
-    else if (getTargetTemp() != BoilerTemp::Cold && getTemp() == getTargetTemp())
-    {
-        isDone = true;
-    }
+    // Operate "Done" pin to reflect the command state.
+    isDone = (getBoilerTargetTemp() != BoilerTemp::Cold && getBoilerTemp() == getBoilerTargetTemp());
     digitalWrite(donePin, isDone);
 }

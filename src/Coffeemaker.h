@@ -1,11 +1,26 @@
-#ifndef Coffeemaker_h
-#define Coffeemaker_h
+#ifndef EspressoMachine_h
+#define EspressoMachine_h
 
 #include "Relay.h"
 #include "Boiler.h"
 #include "Toggle.h"
 
-class Coffeemaker
+enum class EspressoMachineCommand
+{
+    Off,
+    // External commands.
+    PourWater,
+    StopPouringWater,
+    Boil,
+    MakeSteam,
+    CoolDown,
+    // Internal commands.
+    ToggleBoil,
+    ToggleMakeSteam,
+    TogglePourWater,
+};
+
+class EspressoMachine
 {
 private:
     Relay pump;
@@ -13,34 +28,29 @@ private:
     Toggle toggle;
     int donePin;
 
-    String command;
-    boolean isDone;
-    long millisLeftToMakeCoffee;
-    unsigned long pourWaterStartMillis;
+    EspressoMachineCommand lastCommand = EspressoMachineCommand::Off;
+    boolean isCommandChanged = false;
+    boolean isDone = false;
 
-    void setCommand(String);
+    void setCommand(EspressoMachineCommand);
 
 public:
-    Coffeemaker(int, int, int, int, int, int);
+    EspressoMachine(int, int, int, int, int, int);
 
-    // Getters.
-    String getCommand();
+    // Components getters.
     boolean getPumpState();
     boolean getBoilerState();
-    BoilerTemp getTemp();
-    BoilerTemp getTargetTemp();
+    BoilerTemp getBoilerTemp();
+    BoilerTemp getBoilerTargetTemp();
     ToggleState getToggleState();
-    long getMillisLeftToMakeCoffee();
+
+    // Getters.
+    EspressoMachineCommand getCommand();
+    boolean getIsCommandChanged();
     boolean getIsDone();
 
     // Commands.
-    boolean off();
-    boolean pourWater();
-    boolean stopPouringWater();
-    boolean coolDown();
-    boolean boil();
-    boolean makeSteam();
-    boolean makeCoffee(int);
+    boolean command(EspressoMachineCommand);
 
     // Processors.
     void work();

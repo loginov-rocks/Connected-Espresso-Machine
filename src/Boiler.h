@@ -15,6 +15,7 @@ class Boiler : private Relay
 private:
   int isBoilingPin;
   int isSteamPin;
+
   BoilerTemp targetTemp = BoilerTemp::Cold;
 
 public:
