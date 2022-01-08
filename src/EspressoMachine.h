@@ -14,6 +14,7 @@ enum class EspressoMachineCommand
     Boil,
     MakeSteam,
     CoolDown,
+    MakeCoffee,
     // Internal commands.
     ToggleBoil,
     ToggleMakeSteam,
@@ -33,6 +34,12 @@ private:
     boolean isDone = false;
 
     void setCommand(EspressoMachineCommand);
+    void operateDone();
+
+    // Helpers for the "Make Coffee" command.
+    long makeCoffeeMillisLeft = 0;
+    unsigned long makeCoffeePourWaterStartMillis = 0;
+    void makeCoffeeOperate();
 
 public:
     EspressoMachine(int, int, int, int, int, int);
@@ -48,9 +55,11 @@ public:
     EspressoMachineCommand getCommand();
     boolean getIsCommandChanged();
     boolean getIsDone();
+    long getMakeCoffeeMillisLeft();
 
     // Commands.
     boolean command(EspressoMachineCommand);
+    boolean command(EspressoMachineCommand, int);
 
     // Processors.
     void work();

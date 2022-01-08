@@ -8,7 +8,8 @@ Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-ma
 2. Relays: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-relays-part-2-2a070d81ffd2)
 3. Boiler: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-boiler-part-3-db0dcd764f6)
 4. Toggle: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-toggle-part-4-689a737b9f36)
-5. Main Class and Indicators: Medium
+5. Main Class and
+   Indicators: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-main-class-and-indicators-part-5-2f7f45d01c31)
 6. Assembly: Medium
 7. to be continued...
 
@@ -30,3 +31,12 @@ Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-ma
     * [Toggle.h](https://gist.github.com/loginov-rocks/c9e36bb92d1792c3f6f7c3f3043665ad)
     * [Toggle.cpp](https://gist.github.com/loginov-rocks/f31b9a23ab0bc96e5d136551c8843a2f)
     * [main.cpp](https://gist.github.com/loginov-rocks/ca233d7fce4953092067197c9220e12b)
+* DIY Connected Espresso Machine: Main Class and Indicators (Part 5)
+    * [EspressoMachineCommand](https://gist.github.com/loginov-rocks/4d169d05a190bed989a5177bbab5b3b2)
+    * [EspressoMachine Header](https://gist.github.com/loginov-rocks/5bcba13a50df0c58ede9b2d18fece709)
+    * [EspressoMachine Implementation, General Part](https://gist.github.com/loginov-rocks/475e93c029d1173bec8faf8ba5853d02)
+    * [EspressoMachine Implementation, Commands Part](https://gist.github.com/loginov-rocks/041f81c4351a6c8e26f3fedd84651e93)
+    * [EspressoMachine Implementation, Work Part](https://gist.github.com/loginov-rocks/c7e9d3b286da0336fb337f38f9aad5bc)
+    * [Make Coffee Command, Header](https://gist.github.com/loginov-rocks/2659beb02cc3ef7a0d4887b0c5a99738)
+    * [Make Coffee Command, Implementation](https://gist.github.com/loginov-rocks/ec6bf5b8a4b12d6aa5301c269be3f26c)
+    * [main.cpp](https://gist.github.com/loginov-rocks/1fc72c52acc9e6b7471a6ee0421f20cc)

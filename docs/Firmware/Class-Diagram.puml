@@ -57,6 +57,7 @@ enum EspressoMachineCommand {
     Boil
     MakeSteam
     CoolDown
+    MakeCoffee
     ToggleBoil
     ToggleMakeSteam
     TogglePourWater
@@ -72,8 +73,10 @@ class EspressoMachine {
     EspressoMachineCommand getCommand()
     boolean getIsCommandChanged()
     boolean getIsDone()
+    long getMakeCoffeeMillisLeft()
     ..
     boolean command(EspressoMachineCommand)
+    boolean command(EspressoMachineCommand, int)
     ..
     void work()
 }

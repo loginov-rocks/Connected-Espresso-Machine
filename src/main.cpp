@@ -15,6 +15,10 @@ void printlnCommand(EspressoMachineCommand command)
 {
     switch (command)
     {
+    case EspressoMachineCommand::Off:
+        Serial.println("OFF");
+        break;
+
     case EspressoMachineCommand::PourWater:
         Serial.println("POUR_WATER");
         break;
@@ -35,6 +39,10 @@ void printlnCommand(EspressoMachineCommand command)
         Serial.println("COOL_DOWN");
         break;
 
+    case EspressoMachineCommand::MakeCoffee:
+        Serial.println("MAKE_COFFEE");
+        break;
+
     case EspressoMachineCommand::ToggleBoil:
         Serial.println("TOGGLE_BOIL");
         break;
@@ -48,7 +56,7 @@ void printlnCommand(EspressoMachineCommand command)
         break;
 
     default:
-        Serial.println("OFF");
+        Serial.println("Unknown command");
         break;
     }
 }
@@ -119,6 +127,26 @@ void loop()
             userCommand = "pour water (simulating toggle)";
             break;
 
+        case '9':
+            result = espressoMachine.command(EspressoMachineCommand::MakeCoffee, 60);
+            userCommand = "make coffee (60 seconds)";
+            break;
+
+        case 'a':
+            result = espressoMachine.command(EspressoMachineCommand::MakeCoffee);
+            userCommand = "make coffee (no arguments)";
+            break;
+
+        case 'b':
+            result = espressoMachine.command(EspressoMachineCommand::MakeCoffee, 0);
+            userCommand = "make coffee (zero seconds)";
+            break;
+
+        case 'c':
+            result = espressoMachine.command(EspressoMachineCommand::MakeCoffee, -10);
+            userCommand = "make coffee (-10 seconds)";
+            break;
+
         default:
             isCommandCorrect = false;
             break;
@@ -141,6 +169,12 @@ void loop()
     {
         Serial.print("Espresso machine command changed to: ");
         printlnCommand(espressoMachine.getCommand());
+    }
+
+    if (espressoMachine.getCommand() == EspressoMachineCommand::MakeCoffee)
+    {
+        Serial.print("Making coffee, millis left: ");
+        Serial.println(espressoMachine.getMakeCoffeeMillisLeft());
     }
 
     espressoMachine.work();
