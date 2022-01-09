@@ -8,14 +8,23 @@ Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-ma
 2. Relays: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-relays-part-2-2a070d81ffd2)
 3. Boiler: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-boiler-part-3-db0dcd764f6)
 4. Toggle: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-toggle-part-4-689a737b9f36)
-5. Main Class and
-   Indicators: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-main-class-and-indicators-part-5-2f7f45d01c31)
-6. Assembly: Medium
-7. to be continued...
+5. Main Class and Indicators:
+   [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-main-class-and-indicators-part-5-2f7f45d01c31)
+6. Over-the-Air Updates: Medium
+7. Assembly: Medium
+8. to be continued...
 
-## Scheme
+## Hardware
 
-![Scheme](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Hardware/Schemes/5-Final-NodeMCU.png)
+### Scheme
+
+![Hardware Scheme](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Hardware/Schemes/5-Final-NodeMCU.png)
+
+## Firmware
+
+### Class Diagram
+
+![Firmware Class Diagram](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Firmware/Class-Diagram.png)
 
 ## Gists
 
@@ -40,3 +49,8 @@ Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-ma
     * [Make Coffee Command, Header](https://gist.github.com/loginov-rocks/2659beb02cc3ef7a0d4887b0c5a99738)
     * [Make Coffee Command, Implementation](https://gist.github.com/loginov-rocks/ec6bf5b8a4b12d6aa5301c269be3f26c)
     * [main.cpp](https://gist.github.com/loginov-rocks/1fc72c52acc9e6b7471a6ee0421f20cc)
+* DIY Connected Espresso Machine: Over-the-Air Updates (Part 6)
+    * [setupWiFi](https://gist.github.com/loginov-rocks/9061ed1d774c3a61113ba0d1052c8d8f)
+    * [setupOtaUpdates](https://gist.github.com/loginov-rocks/cb05853f007baffa3f6ad5136fe81fc9)
+    * [main.cpp](https://gist.github.com/loginov-rocks/40e418a9ec3267f09f5134f2ff425897)
+    * [platformio.ini](https://gist.github.com/loginov-rocks/5ff42d9c28257ca0188627bac181f19c)

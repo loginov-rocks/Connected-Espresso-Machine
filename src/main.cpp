@@ -1,4 +1,6 @@
+#include "ArduinoOTA.h"
 #include "EspressoMachine.h"
+#include "WiFiManager.h"
 
 #define SERIAL_BAUDRATE 9600
 
@@ -11,171 +13,94 @@
 
 EspressoMachine espressoMachine(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN, DONE_PIN);
 
-void printlnCommand(EspressoMachineCommand command)
+void setupWiFi()
 {
-    switch (command)
-    {
-    case EspressoMachineCommand::Off:
-        Serial.println("OFF");
-        break;
+    Serial.println("Setup Wi-Fi...");
 
-    case EspressoMachineCommand::PourWater:
-        Serial.println("POUR_WATER");
-        break;
+    WiFi.hostname("Connected-Espresso-Machine");
 
-    case EspressoMachineCommand::StopPouringWater:
-        Serial.println("STOP_POURING_WATER");
-        break;
+    WiFiManager wifiManager;
+    wifiManager.autoConnect("Connected-Espresso-Machine");
 
-    case EspressoMachineCommand::Boil:
-        Serial.println("BOIL");
-        break;
+    Serial.println("Wi-Fi setup was successful!");
+    Serial.print("Local IP: ");
+    Serial.println(WiFi.localIP());
+}
 
-    case EspressoMachineCommand::MakeSteam:
-        Serial.println("MAKE_STEAM");
-        break;
+void setupOtaUpdates()
+{
+    Serial.println("Setup Over-the-Air Updates...");
 
-    case EspressoMachineCommand::CoolDown:
-        Serial.println("COOL_DOWN");
-        break;
+    ArduinoOTA.setHostname("connected-espresso-machine");
 
-    case EspressoMachineCommand::MakeCoffee:
-        Serial.println("MAKE_COFFEE");
-        break;
+    ArduinoOTA.onStart([]()
+                       {
+                           String type;
 
-    case EspressoMachineCommand::ToggleBoil:
-        Serial.println("TOGGLE_BOIL");
-        break;
+                           if (ArduinoOTA.getCommand() == U_FLASH)
+                           {
+                               type = "sketch";
+                           }
+                           else
+                           {
+                               // U_FS
+                               type = "filesystem";
+                           }
 
-    case EspressoMachineCommand::ToggleMakeSteam:
-        Serial.println("TOGGLE_MAKE_STEAM");
-        break;
+                           // NOTE: if updating FS this would be the place to unmount FS using FS.end()
+                           Serial.println("Start updating " + type);
+                       });
 
-    case EspressoMachineCommand::TogglePourWater:
-        Serial.println("TOGGLE_POUR_WATER");
-        break;
+    ArduinoOTA.onEnd([]()
+                     { Serial.println("\nEnd"); });
 
-    default:
-        Serial.println("Unknown command");
-        break;
-    }
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total)
+                          { Serial.printf("Progress: %u%%\r", (progress / (total / 100))); });
+
+    ArduinoOTA.onError([](ota_error_t error)
+                       {
+                           Serial.printf("Error[%u]: ", error);
+
+                           if (error == OTA_AUTH_ERROR)
+                           {
+                               Serial.println("Auth Failed");
+                           }
+                           else if (error == OTA_BEGIN_ERROR)
+                           {
+                               Serial.println("Begin Failed");
+                           }
+                           else if (error == OTA_CONNECT_ERROR)
+                           {
+                               Serial.println("Connect Failed");
+                           }
+                           else if (error == OTA_RECEIVE_ERROR)
+                           {
+                               Serial.println("Receive Failed");
+                           }
+                           else if (error == OTA_END_ERROR)
+                           {
+                               Serial.println("End Failed");
+                           }
+                       });
+
+    ArduinoOTA.begin();
+
+    Serial.println("Over-the-Air Updates setup was successful!");
 }
 
 void setup()
 {
     Serial.begin(SERIAL_BAUDRATE);
+    Serial.println("Setup...");
 
-    Serial.print("Initial espresso machine command: ");
-    printlnCommand(espressoMachine.getCommand());
+    setupWiFi();
+    setupOtaUpdates();
+
+    Serial.println("Setup was successful!");
 }
 
 void loop()
 {
-    // Set command based on the user input, if available.
-    if (Serial.available())
-    {
-        int userInput = Serial.read();
-
-        boolean result;
-        String userCommand;
-        boolean isCommandCorrect = true;
-
-        switch (userInput)
-        {
-        case '0':
-            result = espressoMachine.command(EspressoMachineCommand::Off);
-            userCommand = "off";
-            break;
-
-        case '1':
-            result = espressoMachine.command(EspressoMachineCommand::PourWater);
-            userCommand = "pour water";
-            break;
-
-        case '2':
-            result = espressoMachine.command(EspressoMachineCommand::StopPouringWater);
-            userCommand = "stop pouring water";
-            break;
-
-        case '3':
-            result = espressoMachine.command(EspressoMachineCommand::Boil);
-            userCommand = "boil";
-            break;
-
-        case '4':
-            result = espressoMachine.command(EspressoMachineCommand::MakeSteam);
-            userCommand = "make steam";
-            break;
-
-        case '5':
-            result = espressoMachine.command(EspressoMachineCommand::CoolDown);
-            userCommand = "cool down";
-            break;
-
-        case '6':
-            result = espressoMachine.command(EspressoMachineCommand::ToggleBoil);
-            userCommand = "boil (simulating toggle)";
-            break;
-
-        case '7':
-            result = espressoMachine.command(EspressoMachineCommand::ToggleMakeSteam);
-            userCommand = "make steam (simulating toggle)";
-            break;
-
-        case '8':
-            result = espressoMachine.command(EspressoMachineCommand::TogglePourWater);
-            userCommand = "pour water (simulating toggle)";
-            break;
-
-        case '9':
-            result = espressoMachine.command(EspressoMachineCommand::MakeCoffee, 60);
-            userCommand = "make coffee (60 seconds)";
-            break;
-
-        case 'a':
-            result = espressoMachine.command(EspressoMachineCommand::MakeCoffee);
-            userCommand = "make coffee (no arguments)";
-            break;
-
-        case 'b':
-            result = espressoMachine.command(EspressoMachineCommand::MakeCoffee, 0);
-            userCommand = "make coffee (zero seconds)";
-            break;
-
-        case 'c':
-            result = espressoMachine.command(EspressoMachineCommand::MakeCoffee, -10);
-            userCommand = "make coffee (-10 seconds)";
-            break;
-
-        default:
-            isCommandCorrect = false;
-            break;
-        }
-
-        if (isCommandCorrect)
-        {
-            Serial.print("Try to ");
-            Serial.print(userCommand);
-            Serial.print(": ");
-            Serial.println(result ? "success" : "fail");
-        }
-        else
-        {
-            Serial.println("Unknown command");
-        }
-    }
-
-    if (espressoMachine.getIsCommandChanged())
-    {
-        Serial.print("Espresso machine command changed to: ");
-        printlnCommand(espressoMachine.getCommand());
-    }
-
-    if (espressoMachine.getCommand() == EspressoMachineCommand::MakeCoffee)
-    {
-        Serial.print("Making coffee, millis left: ");
-        Serial.println(espressoMachine.getMakeCoffeeMillisLeft());
-    }
-
+    ArduinoOTA.handle();
     espressoMachine.work();
 }
