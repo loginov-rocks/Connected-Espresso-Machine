@@ -1,0 +1,158 @@
+openapi: 3.0.1
+
+info:
+  title: REST Espresso Machine
+  contact:
+    name: Danila Loginov
+    email: danila@loginov.rocks
+    url: https://loginov.rocks
+  version: 2.0.0
+  license:
+    name: MIT
+    url: https://github.com/loginov-rocks/Connected-Espresso-Machine/blob/main/LICENSE
+
+externalDocs:
+  description: GitHub
+  url: https://github.com/loginov-rocks/Connected-Espresso-Machine
+
+servers:
+  - url: http://{local-ip}:{http-port}
+    variables:
+      local-ip:
+        default: 192.168.1.1
+      http-port:
+        default: '80'
+
+paths:
+  /:
+    get:
+      summary: Joke Request
+      responses:
+        418:
+          description: I'm a teapot
+
+  /components-state:
+    get:
+      summary: Get Components State
+      responses:
+        200:
+          description: Components State
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentsState'
+
+  /state:
+    get:
+      summary: Get State
+      responses:
+        200:
+          description: State
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/State'
+
+  /command:
+    post:
+      summary: Request Command
+      parameters:
+        - in: query
+          name: command
+          description: Toggle commands are not accepted
+          schema:
+            $ref: '#/components/schemas/Command'
+          required: true
+        - in: query
+          name: seconds
+          description: Required for "makeCoffee" command
+          schema:
+            type: integer
+            minimum: 1
+            default: 60
+      responses:
+        204:
+          description: No Content
+        400:
+          description: Bad Request
+        409:
+          description: Conflict
+
+components:
+  schemas:
+
+    BoilerTemp:
+      type: string
+      enum:
+        - cold
+        - boiling
+        - steam
+      description: Boiler Temperature
+
+    ToggleState:
+      type: string
+      enum:
+        - off
+        - boil
+        - makeSteam
+        - pourWater
+      description: Toggle State
+
+    Command:
+      type: string
+      enum:
+        - off
+        # External commands.
+        - pourWater
+        - stopPouringWater
+        - boil
+        - makeSteam
+        - coolDown
+        - makeCoffee
+        # Internal commands.
+        - toggleBoil
+        - toggleMakeSteam
+        - togglePourWater
+      description: Command
+
+    ComponentsState:
+      type: object
+      properties:
+        pump:
+          type: boolean
+          description: Pump State
+        boiler:
+          type: boolean
+          description: Boiler State
+        boilerTemp:
+          $ref: '#/components/schemas/BoilerTemp'
+        boilerTargetTemp:
+          $ref: '#/components/schemas/BoilerTemp'
+        toggleState:
+          $ref: '#/components/schemas/ToggleState'
+      required:
+        - pump
+        - boiler
+        - boilerTemp
+        - boilerTargetTemp
+        - toggleState
+
+    State:
+      type: object
+      properties:
+        command:
+          $ref: '#/components/schemas/Command'
+        isCommandChanged:
+          type: boolean
+          description: Is Command Changed
+        isDone:
+          type: boolean
+          description: Is Done
+        makeCoffeeMillisLeft:
+          type: integer
+          description: Make Coffee Millis Left
+      required:
+        - command
+        - isCommandChanged
+        - isDone
+        - makeCoffeeMillisLeft
