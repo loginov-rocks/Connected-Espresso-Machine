@@ -8,7 +8,7 @@ boolean Toggle::inBounds(int value, int target)
 Toggle::Toggle(int _pin)
 {
     // Configure pin.
-    pin = pin;
+    pin = _pin;
     pinMode(pin, INPUT);
 }
 
