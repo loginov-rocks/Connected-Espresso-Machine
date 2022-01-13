@@ -4,6 +4,11 @@
 
 #define SERIAL_BAUDRATE 9600
 
+#define WIFI_HOSTNAME "Connected-Espresso-Machine"
+#define WIFI_ACCESS_POINT_SSID "Connected-Espresso-Machine"
+
+#define OTA_UPDATES_HOSTNAME "connected-espresso-machine"
+
 #define PUMP_RELAY_PIN D1
 #define BOILER_RELAY_PIN D2
 #define BOILER_IS_BOILING_PIN D5
@@ -13,25 +18,31 @@
 
 EspressoMachine espressoMachine(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN, DONE_PIN);
 
+/**
+ * @see https://github.com/tzapu/WiFiManager/blob/master/examples/Basic/Basic.ino
+ */
 void setupWiFi()
 {
     Serial.println("Setup Wi-Fi...");
 
-    WiFi.hostname("Connected-Espresso-Machine");
+    WiFi.hostname(WIFI_HOSTNAME);
 
     WiFiManager wifiManager;
-    wifiManager.autoConnect("Connected-Espresso-Machine");
+    wifiManager.autoConnect(WIFI_ACCESS_POINT_SSID);
 
     Serial.println("Wi-Fi setup was successful!");
     Serial.print("Local IP: ");
     Serial.println(WiFi.localIP());
 }
 
+/**
+ * @see https://github.com/esp8266/Arduino/blob/master/libraries/ArduinoOTA/examples/BasicOTA/BasicOTA.ino
+ */
 void setupOtaUpdates()
 {
     Serial.println("Setup Over-the-Air Updates...");
 
-    ArduinoOTA.setHostname("connected-espresso-machine");
+    ArduinoOTA.setHostname(OTA_UPDATES_HOSTNAME);
 
     ArduinoOTA.onStart([]()
                        {

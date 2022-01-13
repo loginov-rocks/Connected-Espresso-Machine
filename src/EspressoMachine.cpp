@@ -74,9 +74,14 @@ void EspressoMachine::makeCoffeeOperate()
     makeCoffeePourWaterStartMillis = 0;
 }
 
-EspressoMachine::EspressoMachine(int pumpPin, int boilerPin, int isBoilingPin, int isSteamPin, int togglePin, int _donePin) : pump(pumpPin),
-                                                                                                                              boiler(boilerPin, isBoilingPin, isSteamPin),
-                                                                                                                              toggle(togglePin)
+EspressoMachine::EspressoMachine(int pumpPin,
+                                 int boilerPin,
+                                 int isBoilingPin,
+                                 int isSteamPin,
+                                 int togglePin,
+                                 int _donePin) : pump(pumpPin),
+                                                 boiler(boilerPin, isBoilingPin, isSteamPin),
+                                                 toggle(togglePin)
 {
     // Configure "Done" pin.
     donePin = _donePin;
