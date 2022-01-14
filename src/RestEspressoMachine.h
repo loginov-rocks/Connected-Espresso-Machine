@@ -7,6 +7,13 @@
 class RestEspressoMachine
 {
 private:
+    // Helpers.
+    static String boilerTempToString(BoilerTemp);
+    static String toggleStateToString(ToggleState);
+    static String commandToString(EspressoMachineCommand);
+    static boolean isValidCommandString(String);
+    static EspressoMachineCommand stringToCommand(String);
+
     EspressoMachine espressoMachine;
     ESP8266WebServer httpServer;
     int httpPort;

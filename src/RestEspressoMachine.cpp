@@ -1,4 +1,131 @@
+#include "ArduinoJson.h"
 #include "RestEspressoMachine.h"
+
+String RestEspressoMachine::boilerTempToString(BoilerTemp boilerTemp)
+{
+    switch (boilerTemp)
+    {
+    case BoilerTemp::Cold:
+        return "cold";
+    case BoilerTemp::Boiling:
+        return "boiling";
+    case BoilerTemp::Steam:
+        return "steam";
+    default:
+        return "UNKNOWN";
+    }
+}
+
+String RestEspressoMachine::toggleStateToString(ToggleState toggleState)
+{
+    switch (toggleState)
+    {
+    case ToggleState::Off:
+        return "off";
+    case ToggleState::Boil:
+        return "boil";
+    case ToggleState::MakeSteam:
+        return "makeSteam";
+    case ToggleState::PourWater:
+        return "pourWater";
+    default:
+        return "UNKNOWN";
+    }
+}
+
+String RestEspressoMachine::commandToString(EspressoMachineCommand command)
+{
+    switch (command)
+    {
+    case EspressoMachineCommand::Off:
+        return "off";
+    // External commands.
+    case EspressoMachineCommand::PourWater:
+        return "pourWater";
+    case EspressoMachineCommand::StopPouringWater:
+        return "stopPouringWater";
+    case EspressoMachineCommand::Boil:
+        return "boil";
+    case EspressoMachineCommand::MakeSteam:
+        return "makeSteam";
+    case EspressoMachineCommand::CoolDown:
+        return "coolDown";
+    case EspressoMachineCommand::MakeCoffee:
+        return "makeCoffee";
+    // Internal commands.
+    case EspressoMachineCommand::ToggleBoil:
+        return "toggleBoil";
+    case EspressoMachineCommand::ToggleMakeSteam:
+        return "toggleMakeSteam";
+    case EspressoMachineCommand::TogglePourWater:
+        return "togglePourWater";
+    default:
+        return "UNKNOWN";
+    }
+}
+
+// TODO: Optimize.
+boolean RestEspressoMachine::isValidCommandString(String string)
+{
+    return string.equals("off") ||
+           // External commands.
+           string.equals("pourWater") ||
+           string.equals("stopPouringWater") ||
+           string.equals("boil") ||
+           string.equals("makeSteam") ||
+           string.equals("coolDown") ||
+           string.equals("makeCoffee") ||
+           // Internal commands.
+           string.equals("toggleBoil") ||
+           string.equals("toggleMakeSteam") ||
+           string.equals("togglePourWater");
+}
+
+// TODO: Optimize.
+EspressoMachineCommand RestEspressoMachine::stringToCommand(String string)
+{
+    // External commands.
+    if (string.equals("pourWater"))
+    {
+        return EspressoMachineCommand::PourWater;
+    }
+    if (string.equals("stopPouringWater"))
+    {
+        return EspressoMachineCommand::StopPouringWater;
+    }
+    if (string.equals("boil"))
+    {
+        return EspressoMachineCommand::Boil;
+    }
+    if (string.equals("makeSteam"))
+    {
+        return EspressoMachineCommand::MakeSteam;
+    }
+    if (string.equals("coolDown"))
+    {
+        return EspressoMachineCommand::CoolDown;
+    }
+    if (string.equals("makeCoffee"))
+    {
+        return EspressoMachineCommand::MakeCoffee;
+    }
+
+    // Internal commands.
+    if (string.equals("toggleBoil"))
+    {
+        return EspressoMachineCommand::ToggleBoil;
+    }
+    if (string.equals("toggleMakeSteam"))
+    {
+        return EspressoMachineCommand::ToggleMakeSteam;
+    }
+    if (string.equals("togglePourWater"))
+    {
+        return EspressoMachineCommand::TogglePourWater;
+    }
+
+    return EspressoMachineCommand::Off;
+}
 
 RestEspressoMachine::RestEspressoMachine(int pumpPin,
                                          int boilerPin,
@@ -15,50 +142,104 @@ RestEspressoMachine::RestEspressoMachine(int pumpPin,
 
 void RestEspressoMachine::handleGetRoot()
 {
-    httpServer.send(418, "text/plain", "I'm a teapot\r\n");
+    httpServer.send(418, "text/plain", "I'm a teapot");
 }
 
 void RestEspressoMachine::handleGetComponentsState()
 {
-    httpServer.send(200, "text/plain", "Components State\r\n");
+    // @see https://arduinojson.org/v6/how-to/determine-the-capacity-of-the-jsondocument/
+    DynamicJsonDocument json(128);
+    json["pump"] = espressoMachine.getPumpState();
+    json["boiler"] = espressoMachine.getBoilerState();
+    json["boilerTemp"] = RestEspressoMachine::boilerTempToString(espressoMachine.getBoilerTemp());
+    json["boilerTargetTemp"] = RestEspressoMachine::boilerTempToString(espressoMachine.getBoilerTargetTemp());
+    json["toggleState"] = RestEspressoMachine::toggleStateToString(espressoMachine.getToggleState());
+
+    String response;
+    serializeJson(json, response);
+
+    httpServer.send(200, "application/json", response);
 }
 
 void RestEspressoMachine::handleGetState()
 {
-    httpServer.send(200, "text/plain", "State\r\n");
+    // @see https://arduinojson.org/v6/how-to/determine-the-capacity-of-the-jsondocument/
+    DynamicJsonDocument json(128);
+    json["command"] = RestEspressoMachine::commandToString(espressoMachine.getCommand());
+    json["isCommandChanged"] = espressoMachine.getIsCommandChanged();
+    json["isDone"] = espressoMachine.getIsDone();
+    json["makeCoffeeMillisLeft"] = espressoMachine.getMakeCoffeeMillisLeft();
+
+    String response;
+    serializeJson(json, response);
+
+    httpServer.send(200, "application/json", response);
 }
 
 void RestEspressoMachine::handlePostCommand()
 {
-    httpServer.send(204, "text/plain", "No Content\r\n");
+    String commandString = httpServer.arg("command");
+
+    if (!RestEspressoMachine::isValidCommandString(commandString))
+    {
+        httpServer.send(400, "text/plain", "Bad Request");
+        return;
+    }
+
+    EspressoMachineCommand command = RestEspressoMachine::stringToCommand(commandString);
+
+    // Deny internal commands usage programmatically.
+    if (command == EspressoMachineCommand::ToggleBoil ||
+        command == EspressoMachineCommand::ToggleMakeSteam ||
+        command == EspressoMachineCommand::TogglePourWater)
+    {
+        httpServer.send(400, "text/plain", "Bad Request");
+        return;
+    }
+
+    // Deny external commands if the toggle is not in the "Off" position.
+    if (espressoMachine.getToggleState() != ToggleState::Off)
+    {
+        httpServer.send(409, "text/plain", "Conflict");
+        return;
+    }
+
+    // Handle the "Make Coffee" command separately to use the overloaded method.
+    if (command == EspressoMachineCommand::MakeCoffee)
+    {
+        int seconds = httpServer.arg("seconds").toInt();
+
+        // Seconds should be greater than null.
+        if (seconds <= 0)
+        {
+            httpServer.send(400, "text/plain", "Bad Request");
+            return;
+        }
+
+        espressoMachine.command(command, seconds);
+    }
+    else
+    {
+        espressoMachine.command(command);
+    }
+
+    httpServer.send(204, "text/plain", "No Content");
 }
 
 void RestEspressoMachine::handleNotFound()
 {
-    String message = "File Not Found\n\n";
-    message += "URI: ";
-    message += httpServer.uri();
-    message += "\nMethod: ";
-    message += (httpServer.method() == HTTP_GET) ? "GET" : "POST";
-    message += "\nArguments: ";
-    message += httpServer.args();
-    message += "\n";
-
-    for (uint8_t i = 0; i < httpServer.args(); i++)
-    {
-        message += " " + httpServer.argName(i) + ": " + httpServer.arg(i) + "\n";
-    }
-
-    httpServer.send(404, "text/plain", message);
+    httpServer.send(404, "text/plain", "Not Found");
 }
 
 void RestEspressoMachine::setup()
 {
-    httpServer.on("/", std::bind(&RestEspressoMachine::handleGetRoot, this));
-    httpServer.on("/components-state", std::bind(&RestEspressoMachine::handleGetComponentsState, this));
-    httpServer.on("/state", std::bind(&RestEspressoMachine::handleGetState, this));
-    httpServer.on("/command", std::bind(&RestEspressoMachine::handlePostCommand, this));
+    httpServer.on("/", HTTP_GET, std::bind(&RestEspressoMachine::handleGetRoot, this));
+    httpServer.on("/components-state", HTTP_GET, std::bind(&RestEspressoMachine::handleGetComponentsState, this));
+    httpServer.on("/state", HTTP_GET, std::bind(&RestEspressoMachine::handleGetState, this));
+    httpServer.on("/command", HTTP_POST, std::bind(&RestEspressoMachine::handlePostCommand, this));
     httpServer.onNotFound(std::bind(&RestEspressoMachine::handleNotFound, this));
+
+    httpServer.enableCORS(true);
 
     httpServer.begin();
 }
