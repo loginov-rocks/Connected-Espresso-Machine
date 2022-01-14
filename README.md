@@ -26,6 +26,19 @@ Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-ma
 
 ![Firmware Class Diagram](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Firmware/Class-Diagram.png)
 
+## OpenAPI
+
+Requires [Node.js](https://nodejs.org):
+
+```shell
+cd openapi
+npm install
+npm run build
+npm start
+```
+
+Open `http://localhost:8080` in browser and explore `http://localhost:8080/openapi.yaml`
+
 ## Reference
 
 * [Quick start with NodeMCU v3 (ESP8266), Arduino ecosystem, and PlatformIO IDE](https://loginov-rocks.medium.com/quick-start-with-nodemcu-v3-esp8266-arduino-ecosystem-and-platformio-ide-b8415bf9a038)
