@@ -37,7 +37,7 @@ npm run build
 npm start
 ```
 
-Open `http://localhost:8080` in browser and explore `http://localhost:8080/openapi.yaml`
+Open `http://localhost:8080` in browser and explore `openapi.yaml`
 
 ## Reference
 

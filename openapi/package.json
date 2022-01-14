@@ -3,10 +3,11 @@
   "version": "2.0.0",
   "description": "Connected Espresso Machine - OpenAPI",
   "scripts": {
+    "build:clean": "rimraf build",
     "build:swagger": "cp -R node_modules/swagger-ui-dist build",
-    "build:openapi": "cp openapi.yaml",
-    "build": "npm run build:swagger && npm run build:swagger",
-    "start": "http-server build"
+    "build:openapi": "cp openapi.yaml build",
+    "build": "npm run build:clean && npm run build:swagger && npm run build:openapi",
+    "start": "http-server -c-1 build"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/loginov-rocks/Connected-Espresso-Machine",
   "devDependencies": {
     "http-server": "^14.1.0",
+    "rimraf": "^3.0.2",
     "swagger-ui-dist": "^4.1.3"
   }
 }
