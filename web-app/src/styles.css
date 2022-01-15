@@ -1,0 +1,151 @@
+* {
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    transition: all .2s;
+}
+
+body {
+    background: #5D4037;
+    color: #D7CCC8;
+    font: normal 1em/250% Georgia, serif;
+    padding: 5%;
+    margin: 0;
+}
+
+
+
+a {
+    border-radius: .5em;
+    color: #FFFFFF;
+    display: block;
+    text-decoration: none;
+    text-align: center;
+}
+
+a.lastCommand {
+    background: #5D4037 !important;
+    color: #D7CCC8 !important;
+    box-shadow: inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important;
+}
+
+a:hover {
+    color: #D32F2F;
+}
+
+a:active {
+    color: #FFFFFF;
+    background: #D32F2F !important;
+    box-shadow: inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important;
+}
+
+
+
+.top {
+    overflow: hidden;
+    margin-bottom: 5%;
+}
+
+.top > * {
+    float: left;
+}
+
+.logo {
+    font-style: italic;
+    font-size: 1.5em;
+    margin-right: 5%;
+    width: 30%;
+}
+
+.currentBoiler {
+    text-align: right;
+    margin-right: 5%;
+    width: 12.5%;
+}
+
+.currentPump {
+    margin-right: 5%;
+    width: 12.5%;
+}
+
+.working {
+    color: #D32F2F;
+}
+
+#off {
+    background: #795548;
+    width: 30%;
+}
+
+
+
+.switches {
+    overflow: hidden;
+    margin-bottom: 5%;
+}
+
+.boiler {
+    background: #795548;
+    float: left;
+    width: 47.5%;
+}
+
+.boiler .current { box-shadow: inset 0 0 .1em .2em #D32F2F; }
+.boiler .lastCommand.current { box-shadow: inset 0 0 .1em .2em #D32F2F, inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important; }
+.boiler .current:active { box-shadow: inset 0 0 .1em .2em #D32F2F, inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important; }
+
+.boiler .target:before {
+    color: #D32F2F;
+    font-size: 1.5em;
+    line-height: 100%;
+    content: '• ';
+    margin-left: -.6em;
+}
+
+.pump {
+    background: #795548;
+    margin-left: 52.5%;
+    line-height: 375%;
+}
+
+
+
+.main {
+    background: #795548;
+    position: relative;
+    overflow: hidden;
+}
+
+.timer {
+    float: left;
+    width: 20%;
+}
+
+.seconds {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+input[type=range] {
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical;
+    display: block;
+    width: 100%;
+}
+
+#makeCoffee {
+    line-height: 125%;
+    padding-top: 4em;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 20%;
+}
+
+
+
+#off, .boiler, .pump, .main {
+    border-radius: .5em;
+    box-shadow: inset 0 0 .4em .2em rgba(0, 0, 0, .4);
+}
