@@ -71,23 +71,24 @@ components:
   schemas:
 
     BoilerTemp:
+      description: Boiler Temperature
       type: string
       enum:
         - cold
         - boiling
         - steam
-      description: Boiler Temperature
 
     ToggleState:
+      description: Toggle State
       type: string
       enum:
         - off
         - boil
         - makeSteam
         - pourWater
-      description: Toggle State
 
     Command:
+      description: Command
       type: string
       enum:
         - off
@@ -102,17 +103,17 @@ components:
         - toggleBoil
         - toggleMakeSteam
         - togglePourWater
-      description: Command
 
     ComponentsState:
+      description: Components State
       type: object
       properties:
         pump:
-          type: boolean
           description: Pump State
-        boiler:
           type: boolean
+        boiler:
           description: Boiler State
+          type: boolean
         boilerTemp:
           $ref: '#/components/schemas/BoilerTemp'
         boilerTargetTemp:
@@ -127,19 +128,20 @@ components:
         - toggleState
 
     State:
+      description: State
       type: object
       properties:
         command:
           $ref: '#/components/schemas/Command'
         isCommandChanged:
-          type: boolean
           description: Is Command Changed
-        isDone:
           type: boolean
+        isDone:
           description: Is Done
+          type: boolean
         makeCoffeeMillisLeft:
-          type: integer
           description: Make Coffee Millis Left
+          type: integer
         components:
           $ref: '#/components/schemas/ComponentsState'
       required:
@@ -147,3 +149,4 @@ components:
         - isCommandChanged
         - isDone
         - makeCoffeeMillisLeft
+        - components
