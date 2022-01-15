@@ -31,17 +31,6 @@ paths:
         418:
           description: I'm a teapot
 
-  /components-state:
-    get:
-      summary: Get Components State
-      responses:
-        200:
-          description: Components State
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ComponentsState'
-
   /state:
     get:
       summary: Get State
@@ -151,6 +140,8 @@ components:
         makeCoffeeMillisLeft:
           type: integer
           description: Make Coffee Millis Left
+        components:
+          $ref: '#/components/schemas/ComponentsState'
       required:
         - command
         - isCommandChanged

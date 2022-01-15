@@ -20,7 +20,6 @@ private:
 
     // HTTP Handlers.
     void handleGetRoot();
-    void handleGetComponentsState();
     void handleGetState();
     void handlePostCommand();
     void handleNotFound();

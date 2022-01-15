@@ -145,33 +145,24 @@ void RestEspressoMachine::handleGetRoot()
     httpServer.send(418, "text/plain", "I'm a teapot");
 }
 
-void RestEspressoMachine::handleGetComponentsState()
-{
-    // @see https://arduinojson.org/v6/how-to/determine-the-capacity-of-the-jsondocument/
-    DynamicJsonDocument json(128);
-    json["pump"] = espressoMachine.getPumpState();
-    json["boiler"] = espressoMachine.getBoilerState();
-    json["boilerTemp"] = RestEspressoMachine::boilerTempToString(espressoMachine.getBoilerTemp());
-    json["boilerTargetTemp"] = RestEspressoMachine::boilerTempToString(espressoMachine.getBoilerTargetTemp());
-    json["toggleState"] = RestEspressoMachine::toggleStateToString(espressoMachine.getToggleState());
-
-    String response;
-    serializeJson(json, response);
-
-    httpServer.send(200, "application/json", response);
-}
-
 void RestEspressoMachine::handleGetState()
 {
     // @see https://arduinojson.org/v6/how-to/determine-the-capacity-of-the-jsondocument/
-    DynamicJsonDocument json(128);
-    json["command"] = RestEspressoMachine::commandToString(espressoMachine.getCommand());
-    json["isCommandChanged"] = espressoMachine.getIsCommandChanged();
-    json["isDone"] = espressoMachine.getIsDone();
-    json["makeCoffeeMillisLeft"] = espressoMachine.getMakeCoffeeMillisLeft();
+    DynamicJsonDocument state(256);
+    state["command"] = RestEspressoMachine::commandToString(espressoMachine.getCommand());
+    state["isCommandChanged"] = espressoMachine.getIsCommandChanged();
+    state["isDone"] = espressoMachine.getIsDone();
+    state["makeCoffeeMillisLeft"] = espressoMachine.getMakeCoffeeMillisLeft();
+
+    JsonObject componentsState = state.createNestedObject("components");
+    componentsState["pump"] = espressoMachine.getPumpState();
+    componentsState["boiler"] = espressoMachine.getBoilerState();
+    componentsState["boilerTemp"] = RestEspressoMachine::boilerTempToString(espressoMachine.getBoilerTemp());
+    componentsState["boilerTargetTemp"] = RestEspressoMachine::boilerTempToString(espressoMachine.getBoilerTargetTemp());
+    componentsState["toggleState"] = RestEspressoMachine::toggleStateToString(espressoMachine.getToggleState());
 
     String response;
-    serializeJson(json, response);
+    serializeJson(state, response);
 
     httpServer.send(200, "application/json", response);
 }
@@ -234,7 +225,6 @@ void RestEspressoMachine::handleNotFound()
 void RestEspressoMachine::setup()
 {
     httpServer.on("/", HTTP_GET, std::bind(&RestEspressoMachine::handleGetRoot, this));
-    httpServer.on("/components-state", HTTP_GET, std::bind(&RestEspressoMachine::handleGetComponentsState, this));
     httpServer.on("/state", HTTP_GET, std::bind(&RestEspressoMachine::handleGetState, this));
     httpServer.on("/command", HTTP_POST, std::bind(&RestEspressoMachine::handlePostCommand, this));
     httpServer.onNotFound(std::bind(&RestEspressoMachine::handleNotFound, this));
