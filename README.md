@@ -14,6 +14,12 @@ Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-ma
 7. Assembly: Medium
 8. to be continued...
 
+## Architecture
+
+### REST
+
+![REST Architecture](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Architecture/REST.png)
+
 ## Hardware
 
 ### Scheme
