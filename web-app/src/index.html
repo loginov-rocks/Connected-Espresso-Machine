@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-        <meta name="theme-color" content="#5D4037" />
-        <title>CoffeeBot</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script src="scripts.js"></script>
-        <link href="styles.css" rel="stylesheet" />
-    </head>
-    <body>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1" name="viewport" />
+    <meta content="#5D4037" name="theme-color" />
+    <title>CoffeeBot</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="scripts.js"></script>
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body>
 
-        <div class="top">
+    <div class="top">
 
-            <div class="logo">CoffeeBot</div>
+      <div class="logo">CoffeeBot</div>
 
-            <div class="currentBoiler">Boiler</div>
+      <div class="currentBoiler">Boiler</div>
 
-            <div class="currentPump">Pump</div>
+      <div class="currentPump">Pump</div>
 
-            <a id="off" href="javascript:void(0);">Off</a>
+      <a href="javascript:void(0);" id="off">Off</a>
 
-        </div>
+    </div>
 
-        <div class="switches">
+    <div class="switches">
 
-            <div class="boiler">
-                <a id="makeSteam" href="javascript:void(0);">Make Steam</a>
-                <a id="heatWater" href="javascript:void(0);">Boil</a>
-                <a id="coolDown" href="javascript:void(0);">Cool Down</a>
-            </div>
+      <div class="boiler">
+        <a href="javascript:void(0);" id="makeSteam">Make Steam</a>
+        <a href="javascript:void(0);" id="heatWater">Boil</a>
+        <a href="javascript:void(0);" id="coolDown">Cool Down</a>
+      </div>
 
-            <div class="pump">
-                <a id="flowWater" href="javascript:void(0);">Pour Water</a>
-                <a id="stopWater" href="javascript:void(0);">Stop Pouring Water</a>
-            </div>
+      <div class="pump">
+        <a href="javascript:void(0);" id="flowWater">Pour Water</a>
+        <a href="javascript:void(0);" id="stopWater">Stop Pouring Water</a>
+      </div>
 
-        </div>
+    </div>
 
-        <div class="main">
+    <div class="main">
 
-            <div class="timer">
-                <div class="seconds"><span id="makeCoffeeSeconds">30</span>"</div>
-                <input id="makeCoffeeSecondsInput" type="range" min="1" max="120" value="30" orient="vertical" />
-            </div>
+      <div class="timer">
+        <div class="seconds"><span id="makeCoffeeSeconds">30</span>"</div>
+        <input id="makeCoffeeSecondsInput" max="120" min="1" orient="vertical" type="range" value="30" />
+      </div>
 
-            <a id="makeCoffee" href="javascript:void(0);">Make<br />Coffee!</a>
+      <a href="javascript:void(0);" id="makeCoffee">Make<br />Coffee!</a>
 
-        </div>
+    </div>
 
-    </body>
+  </body>
 </html>
