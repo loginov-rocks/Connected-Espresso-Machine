@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+        <meta name="theme-color" content="#5D4037" />
+        <title>CoffeeBot</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script>
+
+            $(function () {
+
+                var refreshTimer = setTimeout(function refreshFunc() {
+                    $.getJSON('/api/').done(refresh);
+                    refreshTimer = setTimeout(refreshFunc, 2000);
+                }, 2000);
+
+                $.getJSON('/api/').done(refresh);
+
+                $('a[id]').click(function () {
+                    var url = '/api/' + $(this).attr('id');
+                    if ($(this).attr('id') == 'makeCoffee') {
+                        url += '/' + $('#makeCoffeeSeconds').text()
+                    }
+                    url += '/';
+
+                    $.getJSON(url)
+                            .done(refresh)
+                            .fail(function (jqXHR, textStatus, errorThrown) {
+                                alert('Ошибка: ' + jqXHR.responseText + ', ' + textStatus);
+                            });
+                });
+
+                $('#makeCoffeeSecondsInput').on('change mousemove', function () {
+                    $('#makeCoffeeSeconds').text($(this).val());
+                });
+
+                function refresh(json) {
+                    $('.lastCommand').removeClass('lastCommand');
+                    $('#' + json.lastCommand).addClass('lastCommand');
+
+                    if (json.pumpState) {
+                        $('.currentPump').addClass('working');
+                    }
+                    else {
+                        $('.currentPump').removeClass('working');
+                    }
+
+                    if (json.boilerState) {
+                        $('.currentBoiler').addClass('working');
+                    }
+                    else {
+                        $('.currentBoiler').removeClass('working');
+                    }
+
+                    var currentButton = '';
+                    switch (json.boilerStage) {
+                        case 'steam':
+                            currentButton = 'makeSteam';
+                            break;
+                        case 'hot':
+                            currentButton = 'heatWater';
+                            break;
+                        default:
+                            currentButton = 'coolDown';
+                            break;
+                    }
+                    $('.boiler .current').removeClass('current');
+                    $('.boiler #' + currentButton).addClass('current');
+
+                    var targetButton = '';
+                    switch (json.boilerTargetStage) {
+                        case 'steam':
+                            targetButton = 'makeSteam';
+                            break;
+                        case 'hot':
+                            targetButton = 'heatWater';
+                            break;
+                        default:
+                            targetButton = 'coolDown';
+                            break;
+                    }
+                    $('.boiler .target').removeClass('target');
+                    $('.boiler #' + targetButton).addClass('target');
+                }
+
+            });
+
+        </script>
+        <style>
+
+            * {
+                font-size: 100%;
+                margin: 0;
+                padding: 0;
+                transition: all .2s;
+            }
+
+            body {
+                background: #5D4037;
+                color: #D7CCC8;
+                font: normal 1em/250% Georgia, serif;
+                padding: 5%;
+                margin: 0;
+            }
+
+
+
+            a {
+                border-radius: .5em;
+                color: #FFFFFF;
+                display: block;
+                text-decoration: none;
+                text-align: center;
+            }
+
+            a.lastCommand {
+                background: #5D4037 !important;
+                color: #D7CCC8 !important;
+                box-shadow: inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important;
+            }
+
+            a:hover {
+                color: #D32F2F;
+            }
+
+            a:active {
+                color: #FFFFFF;
+                background: #D32F2F !important;
+                box-shadow: inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important;
+            }
+
+
+
+            .top {
+                overflow: hidden;
+                margin-bottom: 5%;
+            }
+
+            .top > * {
+                float: left;
+            }
+
+            .logo {
+                font-style: italic;
+                font-size: 1.5em;
+                margin-right: 5%;
+                width: 30%;
+            }
+
+            .currentBoiler {
+                text-align: right;
+                margin-right: 5%;
+                width: 12.5%;
+            }
+
+            .currentPump {
+                margin-right: 5%;
+                width: 12.5%;
+            }
+
+            .working {
+                color: #D32F2F;
+            }
+
+            #off {
+                background: #795548;
+                width: 30%;
+            }
+
+
+
+            .switches {
+                overflow: hidden;
+                margin-bottom: 5%;
+            }
+
+            .boiler {
+                background: #795548;
+                float: left;
+                width: 47.5%;
+            }
+
+            .boiler .current { box-shadow: inset 0 0 .1em .2em #D32F2F; }
+            .boiler .lastCommand.current { box-shadow: inset 0 0 .1em .2em #D32F2F, inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important; }
+            .boiler .current:active { box-shadow: inset 0 0 .1em .2em #D32F2F, inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important; }
+
+            .boiler .target:before {
+                color: #D32F2F;
+                font-size: 1.5em;
+                line-height: 100%;
+                content: '• ';
+                margin-left: -.6em;
+            }
+
+            .pump {
+                background: #795548;
+                margin-left: 52.5%;
+                line-height: 375%;
+            }
+
+
+
+            .main {
+                background: #795548;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .timer {
+                float: left;
+                width: 20%;
+            }
+
+            .seconds {
+                font-size: 1.5em;
+                text-align: center;
+            }
+
+            input[type=range] {
+                writing-mode: bt-lr; /* IE */
+                -webkit-appearance: slider-vertical;
+                display: block;
+                width: 100%;
+            }
+
+            #makeCoffee {
+                line-height: 125%;
+                padding-top: 4em;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 20%;
+            }
+
+
+
+            #off, .boiler, .pump, .main {
+                border-radius: .5em;
+                box-shadow: inset 0 0 .4em .2em rgba(0, 0, 0, .4);
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <div class="top">
+
+            <div class="logo">CoffeeBot</div>
+
+            <div class="currentBoiler">boiler</div>
+
+            <div class="currentPump">pump</div>
+
+            <a id="off" href="javascript:void(0);">Выключить</a>
+
+        </div>
+
+        <div class="switches">
+
+            <div class="boiler">
+                <a id="makeSteam" href="javascript:void(0);">Сделать пар</a>
+                <a id="heatWater" href="javascript:void(0);">Нагреть воду</a>
+                <a id="coolDown" href="javascript:void(0);">Остудить воду</a>
+            </div>
+
+            <div class="pump">
+                <a id="flowWater" href="javascript:void(0);">Налить воды</a>
+                <a id="stopWater" href="javascript:void(0);">Остановить</a>
+            </div>
+
+        </div>
+
+        <div class="main">
+
+            <div class="timer">
+                <div class="seconds"><span id="makeCoffeeSeconds">30</span>"</div>
+                <input id="makeCoffeeSecondsInput" type="range" min="1" max="120" value="30" orient="vertical" />
+            </div>
+
+            <a id="makeCoffee" href="javascript:void(0);">Сделать<br />кофе!</a>
+
+        </div>
+
+    </body>
+</html>
