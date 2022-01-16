@@ -1,11 +1,38 @@
+const api = new Api({
+  getStateTimeout: 1000,
+});
+
+const businessLogic = new BusinessLogic(api, {
+  pollingInterval: 1000,
+});
+
+const userInterface = new UserInterface({
+  defaultLocalIp: '192.168.1.1',
+  defaultHttpPort: '80',
+  localIpStorageKey: 'localIp',
+  httpPortStorageKey: 'httpPort',
+});
+
+businessLogic.onStateUpdate((state) => userInterface.updateState(state));
+
+userInterface.onLocalIpChange((localIp) => businessLogic.setLocalIp(localIp));
+
+userInterface.onHttpPortChange(
+    (httpPort) => businessLogic.setHttpPort(httpPort),
+);
+
+userInterface.onRequestCommand(
+    (command, parameters) => businessLogic.requestCommand(command, parameters),
+);
+
+window.addEventListener('DOMContentLoaded', () => {
+  // Initialize User Interface first to provide initialized variables.
+  userInterface.initialize();
+
+  businessLogic.initialize();
+});
+
 $(function() {
-
-  var refreshTimer = setTimeout(function refreshFunc() {
-    $.getJSON('/api/').done(refresh);
-    refreshTimer = setTimeout(refreshFunc, 2000);
-  }, 2000);
-
-  $.getJSON('/api/').done(refresh);
 
   $('a[id]').click(function() {
     var url = '/api/' + $(this).attr('id');
