@@ -44,8 +44,20 @@ class BusinessLogic {
    * @param {Object} [parameters={}]
    * @returns {void}
    */
-  requestCommand(command, parameters = {}) {
-    console.log('requestCommand', command, parameters);
+  async requestCommand(command, parameters = {}) {
+    try {
+      await this.api.requestCommand(command, parameters);
+    } catch (error) {
+      console.warn('requestCommand', error);
+
+      let message = `Unable to request command "${command}"`;
+
+      if (Object.keys(parameters).length > 0) {
+        message += ` with parameters ${JSON.stringify(parameters)}`;
+      }
+
+      alert(message);
+    }
   }
 
   /**
@@ -83,7 +95,7 @@ class BusinessLogic {
         const state = await this.api.getState();
         this.stateUpdateListener(state);
       } catch (error) {
-        console.warn(error);
+        console.warn('poll', error);
         this.stateUpdateListener(null);
       }
     }

@@ -9,21 +9,19 @@ const businessLogic = new BusinessLogic(api, {
 const userInterface = new UserInterface({
   defaultLocalIp: '192.168.1.1',
   defaultHttpPort: '80',
+  defaultMakeCoffeeSeconds: 30,
   localIpStorageKey: 'localIp',
   httpPortStorageKey: 'httpPort',
+  makeCoffeeSecondsStorageKey: 'makeCoffeeSeconds',
 });
 
 businessLogic.onStateUpdate((state) => userInterface.updateState(state));
 
 userInterface.onLocalIpChange((localIp) => businessLogic.setLocalIp(localIp));
 
-userInterface.onHttpPortChange(
-    (httpPort) => businessLogic.setHttpPort(httpPort),
-);
+userInterface.onHttpPortChange((httpPort) => businessLogic.setHttpPort(httpPort));
 
-userInterface.onRequestCommand(
-    (command, parameters) => businessLogic.requestCommand(command, parameters),
-);
+userInterface.onRequestCommand((command, parameters) => businessLogic.requestCommand(command, parameters));
 
 window.addEventListener('DOMContentLoaded', () => {
   // Initialize User Interface first to provide initialized variables.
@@ -33,26 +31,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 $(function() {
-
-  $('a[id]').click(function() {
-    var url = '/api/' + $(this).attr('id');
-
-    if ($(this).attr('id') === 'makeCoffee') {
-      url += '/' + $('#makeCoffeeSeconds').text();
-    }
-
-    url += '/';
-
-    $.getJSON(url).
-        done(refresh).
-        fail(function(jqXHR, textStatus, errorThrown) {
-          alert('Ошибка: ' + jqXHR.responseText + ', ' + textStatus);
-        });
-  });
-
-  $('#makeCoffeeSecondsInput').on('change mousemove', function() {
-    $('#makeCoffeeSeconds').text($(this).val());
-  });
 
   function refresh(json) {
     $('.lastCommand').removeClass('lastCommand');

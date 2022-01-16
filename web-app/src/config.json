@@ -1,6 +1,0 @@
-{
-  "defaultFlowWaterSeconds": 30,
-  "maxFlowWaterSeconds": 90,
-  "defaultCoffeeMakingSeconds": 30,
-  "maxCoffeeMakingSeconds": 90
-}

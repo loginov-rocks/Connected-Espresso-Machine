@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1" name="viewport" />
@@ -32,21 +32,21 @@
 
       <div class="currentPump">Pump</div>
 
-      <a href="javascript:void(0);" id="off">Off</a>
+      <input disabled id="off" type="button" value="Off" />
 
     </div>
 
     <div class="switches">
 
       <div class="boiler">
-        <a href="javascript:void(0);" id="makeSteam">Make Steam</a>
-        <a href="javascript:void(0);" id="heatWater">Boil</a>
-        <a href="javascript:void(0);" id="coolDown">Cool Down</a>
+        <input disabled id="makeSteam" type="button" value="Make Steam" />
+        <input disabled id="boil" type="button" value="Boil" />
+        <input disabled id="coolDown" type="button" value="Cool Down" />
       </div>
 
       <div class="pump">
-        <a href="javascript:void(0);" id="flowWater">Pour Water</a>
-        <a href="javascript:void(0);" id="stopWater">Stop Pouring Water</a>
+        <input disabled id="pourWater" type="button" value="Pour Water" />
+        <input disabled id="stopPouringWater" type="button" value="Stop Pouring Water" />
       </div>
 
     </div>
@@ -54,11 +54,11 @@
     <div class="main">
 
       <div class="timer">
-        <div class="seconds"><span id="makeCoffeeSeconds">30</span>"</div>
-        <input id="makeCoffeeSecondsInput" max="120" min="1" orient="vertical" type="range" value="30" />
+        <div class="seconds"><label for="makeCoffeeSeconds" id="makeCoffeeSecondsLabel">30</label>"</div>
+        <input disabled id="makeCoffeeSeconds" max="120" min="1" type="range" value="30" />
       </div>
 
-      <a href="javascript:void(0);" id="makeCoffee">Make<br />Coffee!</a>
+      <input disabled id="makeCoffee" type="button" value="Make Coffee" />
 
     </div>
 

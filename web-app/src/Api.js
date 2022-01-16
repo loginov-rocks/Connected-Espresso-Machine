@@ -27,8 +27,7 @@ class Api {
     const url = `${this.baseUrl}/state`;
 
     const controller = new AbortController();
-    const fetchTimeout = setTimeout(() => controller.abort(),
-        this.getStateTimeout);
+    const fetchTimeout = setTimeout(() => controller.abort(), this.getStateTimeout);
 
     const response = await fetch(url, {signal: controller.signal});
     clearTimeout(fetchTimeout);
