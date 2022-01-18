@@ -17,6 +17,7 @@ const userInterface = new UserInterface({
   localIpStorageKey: 'localIp',
   httpPortStorageKey: 'httpPort',
   makeCoffeeSecondsStorageKey: 'makeCoffeeSeconds',
+  activeStateClassName: 'activeState',
 });
 
 businessLogic.onStateUpdate((state) => userInterface.updateState(state));

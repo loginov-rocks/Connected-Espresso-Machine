@@ -1,0 +1,14 @@
+input[type=button] {
+  height: 100%;
+  width: 100%;
+}
+
+input[type=range] {
+  -webkit-appearance: slider-vertical;
+  width: 100%;
+}
+
+input[type=text] {
+  box-sizing: border-box;
+  width: 100%;
+}

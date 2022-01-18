@@ -2,62 +2,94 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1" name="viewport" />
-    <meta content="#5D4037" name="theme-color" />
-    <title>CoffeeBot</title>
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <meta content="#5d4037" name="theme-color" />
+    <title>Connected Espresso Machine</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="main.js" type="module"></script>
-    <link href="main.css" rel="stylesheet" />
+    <script src="scripts/index.js" type="module"></script>
+    <link href="styles/index.css" rel="stylesheet" />
   </head>
   <body>
+    <div class="app">
 
-    <div>
-      <label for="localIp">Local IP</label>
-      <input disabled id="localIp" placeholder="192.168.1.1" />
-    </div>
-
-    <div>
-      <label for="httpPort">HTTP Port</label>
-      <input disabled id="httpPort" placeholder="80" />
-    </div>
-
-    <div class="top">
-
-      <div class="logo">CoffeeBot</div>
-
-      <div class="currentBoiler">Boiler</div>
-
-      <div class="currentPump">Pump</div>
-
-      <input disabled id="off" type="button" value="Off" />
-
-    </div>
-
-    <div class="switches">
-
-      <div class="boiler">
-        <input disabled id="makeSteam" type="button" value="Make Steam" />
-        <input disabled id="boil" type="button" value="Boil" />
-        <input disabled id="coolDown" type="button" value="Cool Down" />
+      <div class="row">
+        <div class="col">
+          <h1>Connected Espresso Machine</h1>
+        </div>
       </div>
 
-      <div class="pump">
-        <input disabled id="pourWater" type="button" value="Pour Water" />
-        <input disabled id="stopPouringWater" type="button" value="Stop Pouring Water" />
+      <div class="row">
+        <div class="col">
+          <label for="localIp">Local IP</label>
+          <input disabled id="localIp" placeholder="192.168.1.1" type="text" />
+        </div>
+        <div class="col">
+          <label for="httpPort">HTTP Port</label>
+          <input disabled id="httpPort" placeholder="80" type="text" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          Toggle
+        </div>
+        <div class="col">
+          <span class="toggleState" id="toggleMakeSteamState">Make Steam</span>
+        </div>
+        <div class="col">
+          <span class="toggleState" id="toggleOffState">Off</span>
+        </div>
+        <div class="col">
+          <span class="toggleState" id="toggleBoilState">Boil</span>
+        </div>
+        <div class="col">
+          <span class="toggleState" id="togglePourWaterState">Pour Water</span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div>Command: <span class="commandState" id="commandState">Unknown</span></div>
+        </div>
+        <div class="col">
+          <span class="doneState" id="doneState">Done</span>
+        </div>
+        <div class="col">
+          <input disabled id="off" type="button" value="Off" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <span class="boilerState" id="boilerState">Boiler</span>
+          <input disabled id="makeSteam" type="button" value="Make Steam" />
+          <input disabled id="boil" type="button" value="Boil" />
+          <input disabled id="coolDown" type="button" value="Cool Down" />
+        </div>
+        <div class="col">
+          <span class="pumpState" id="pumpState">Pump</span>
+          <input disabled id="pourWater" type="button" value="Pour Water" />
+          <input disabled id="stopPouringWater" type="button" value="Stop Pouring Water" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label class="makeCoffeeSecondsLabel" for="makeCoffeeSeconds" id="makeCoffeeSecondsLabel">30"</label>
+          <input disabled id="makeCoffeeSeconds" max="120" min="1" type="range" value="30" />
+        </div>
+        <div class="col">
+          <input disabled id="makeCoffee" type="button" value="Make Coffee" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <a href="https://github.com/loginov-rocks/Connected-Espresso-Machine" rel="noopener noreferrer"
+             target="_blank">GitHub</a>
+        </div>
       </div>
 
     </div>
-
-    <div class="main">
-
-      <div class="timer">
-        <div class="seconds"><label for="makeCoffeeSeconds" id="makeCoffeeSecondsLabel">30</label>"</div>
-        <input disabled id="makeCoffeeSeconds" max="120" min="1" type="range" value="30" />
-      </div>
-
-      <input disabled id="makeCoffee" type="button" value="Make Coffee" />
-
-    </div>
-
   </body>
 </html>

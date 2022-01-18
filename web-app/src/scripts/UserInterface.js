@@ -10,6 +10,8 @@ export class UserInterface {
     this.localIpStorageKey = options.localIpStorageKey;
     this.httpPortStorageKey = options.httpPortStorageKey;
     this.makeCoffeeSecondsStorageKey = options.makeCoffeeSecondsStorageKey;
+
+    this.activeStateClassName = options.activeStateClassName;
   }
 
   /**
@@ -45,8 +47,25 @@ export class UserInterface {
    * @returns {void}
    */
   updateState(state) {
-    // Enable or disable buttons based on state.
-    if (state === null || ['toggleBoil', 'toggleMakeSteam', 'togglePourWater'].includes(state.command)) {
+    const toggleState = state ? state.components.toggleState : null;
+    this.updateActiveState(this.toggleMakeSteamState, toggleState === 'makeSteam');
+    this.updateActiveState(this.toggleOffState, toggleState === 'off');
+    this.updateActiveState(this.toggleBoilState, toggleState === 'boil');
+    this.updateActiveState(this.togglePourWaterState, toggleState === 'pourWater');
+
+    this.commandState.textContent = state ? state.command : 'Unknown';
+    if (state && state.isCommandChanged) {
+      // Blink for 1 second if the command changed.
+      this.updateActiveState(this.commandState, true);
+      setTimeout(() => this.updateActiveState(this.commandState, false), 1000);
+    }
+
+    this.updateActiveState(this.doneState, state && state.isDone);
+    this.updateActiveState(this.boilerState, state && state.components.boiler);
+    this.updateActiveState(this.pumpState, state && state.components.pump);
+
+    // Enable or disable buttons based on state and toggle.
+    if (state === null || ['makeSteam', 'boil', 'pourWater'].includes(state.components.toggleState)) {
       this.buttons.forEach((button) => button.setAttribute('disabled', true));
     } else {
       this.buttons.forEach((button) => button.removeAttribute('disabled'));
@@ -120,7 +139,18 @@ export class UserInterface {
       coolDownButton,
       pourWaterButton,
       stopPouringWaterButton,
-      makeCoffeeButton];
+      makeCoffeeButton,
+    ];
+
+    // Get and keep references to HTML elements representing various states.
+    this.toggleMakeSteamState = document.getElementById('toggleMakeSteamState');
+    this.toggleOffState = document.getElementById('toggleOffState');
+    this.toggleBoilState = document.getElementById('toggleBoilState');
+    this.togglePourWaterState = document.getElementById('togglePourWaterState');
+    this.commandState = document.getElementById('commandState');
+    this.doneState = document.getElementById('doneState');
+    this.boilerState = document.getElementById('boilerState');
+    this.pumpState = document.getElementById('pumpState');
   }
 
   /**
@@ -163,7 +193,7 @@ export class UserInterface {
       const makeCoffeeSeconds = event.target.value;
       localStorage.setItem(this.makeCoffeeSecondsStorageKey, makeCoffeeSeconds);
 
-      labelElement.textContent = makeCoffeeSeconds;
+      labelElement.textContent = `${makeCoffeeSeconds}"`;
     };
   }
 
@@ -176,6 +206,20 @@ export class UserInterface {
   handleCommand(command, parameters = {}) {
     if (this.requestCommandListener) {
       this.requestCommandListener(command, parameters);
+    }
+  }
+
+  /**
+   * @private
+   * @param {HTMLElement} element
+   * @param {boolean} isActive
+   * @returns {void}
+   */
+  updateActiveState(element, isActive) {
+    if (isActive) {
+      element.classList.add(this.activeStateClassName);
+    } else {
+      element.classList.remove(this.activeStateClassName);
     }
   }
 }

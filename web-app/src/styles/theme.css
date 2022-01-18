@@ -1,0 +1,28 @@
+body {
+  background: #5d4037;
+  color: #d7ccc8;
+}
+
+a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #d32f2f;
+}
+
+.app {
+  border: 1px solid red;
+  padding: 0.5rem;
+}
+
+.col {
+  border: 1px solid green;
+  padding: 0.5rem;
+}
+
+.row {
+  border: 1px solid blue;
+  padding: 0.5rem;
+}

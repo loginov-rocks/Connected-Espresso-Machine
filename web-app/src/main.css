@@ -1,35 +1,16 @@
 * {
-  font-size: 100%;
-  margin: 0;
-  padding: 0;
   transition: all .2s;
-}
-
-body {
-  background: #5d4037;
-  color: #d7ccc8;
-  font: normal 1em/250% Georgia, serif;
-  margin: 0;
-  padding: 5%;
 }
 
 
 a {
   border-radius: .5em;
-  color: #ffffff;
-  display: block;
-  text-align: center;
-  text-decoration: none;
 }
 
 a.lastCommand {
   background: #5d4037 !important;
   box-shadow: inset 0 0 .4em .2em rgba(0, 0, 0, .4) !important;
   color: #d7ccc8 !important;
-}
-
-a:hover {
-  color: #d32f2f;
 }
 
 a:active {
@@ -39,52 +20,17 @@ a:active {
 }
 
 
-.top {
-  margin-bottom: 5%;
-  overflow: hidden;
-}
-
-.top > * {
-  float: left;
-}
-
-.logo {
-  font-size: 1.5em;
-  font-style: italic;
-  margin-right: 5%;
-  width: 30%;
-}
-
-.currentBoiler {
-  margin-right: 5%;
-  text-align: right;
-  width: 12.5%;
-}
-
-.currentPump {
-  margin-right: 5%;
-  width: 12.5%;
-}
-
 .working {
   color: #d32f2f;
 }
 
 #off {
   background: #795548;
-  width: 30%;
 }
 
-
-.switches {
-  margin-bottom: 5%;
-  overflow: hidden;
-}
 
 .boiler {
   background: #795548;
-  float: left;
-  width: 47.5%;
 }
 
 .boiler .current {
@@ -102,49 +48,15 @@ a:active {
 .boiler .target:before {
   color: #d32f2f;
   content: '• ';
-  font-size: 1.5em;
-  line-height: 100%;
-  margin-left: -.6em;
 }
 
 .pump {
   background: #795548;
-  line-height: 375%;
-  margin-left: 52.5%;
 }
 
 
 .main {
   background: #795548;
-  overflow: hidden;
-  position: relative;
-}
-
-.timer {
-  float: left;
-  width: 20%;
-}
-
-.seconds {
-  font-size: 1.5em;
-  text-align: center;
-}
-
-input[type=range] {
-  -webkit-appearance: slider-vertical;
-  display: block;
-  width: 100%;
-  writing-mode: bt-lr; /* IE */
-}
-
-#makeCoffee {
-  bottom: 0;
-  left: 20%;
-  line-height: 125%;
-  padding-top: 4em;
-  position: absolute;
-  right: 0;
-  top: 0;
 }
 
 
