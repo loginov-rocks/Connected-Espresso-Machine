@@ -45,6 +45,27 @@ npm start
 
 Open `http://localhost:8080` in browser and explore `openapi.yaml`
 
+## Web App
+
+Requires [Node.js](https://nodejs.org):
+
+```shell
+cd web-app
+npm install
+npm start
+```
+
+Open `http://localhost:8080` in browser.
+
+### Test API
+
+```shell
+npm run start:test-api
+```
+
+This will start **Test API** listening at `http://localhost:3000` by default, so **Web App** can be pointed to *local
+IP* `localhost` and *HTTP port* `3000` to test.
+
 ## Reference
 
 * [Quick start with NodeMCU v3 (ESP8266), Arduino ecosystem, and PlatformIO IDE](https://loginov-rocks.medium.com/quick-start-with-nodemcu-v3-esp8266-arduino-ecosystem-and-platformio-ide-b8415bf9a038)

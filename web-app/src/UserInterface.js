@@ -1,4 +1,4 @@
-class UserInterface {
+export class UserInterface {
   /**
    * @param {Object} options
    */
@@ -45,8 +45,6 @@ class UserInterface {
    * @returns {void}
    */
   updateState(state) {
-    console.log('updateState', state);
-
     // Enable or disable buttons based on state.
     if (state === null || ['toggleBoil', 'toggleMakeSteam', 'togglePourWater'].includes(state.command)) {
       this.buttons.forEach((button) => button.setAttribute('disabled', true));

@@ -1,4 +1,4 @@
-class Api {
+export class Api {
   /**
    * @param {Object} options
    */
@@ -36,7 +36,11 @@ class Api {
       throw response;
     }
 
-    return response.json();
+    const json = await response.json();
+
+    console.log('getState', url, json);
+
+    return json;
   }
 
   /**
@@ -53,6 +57,8 @@ class Api {
     const urlSearchParams = new URLSearchParams(parameters);
     urlSearchParams.set('command', command);
     const url = `${this.baseUrl}/command?${urlSearchParams.toString()}`;
+
+    console.log('requestCommand', url);
 
     const response = await fetch(url, {method: 'post'});
 

@@ -1,3 +1,7 @@
+import {Api} from './Api.js';
+import {BusinessLogic} from './BusinessLogic.js';
+import {UserInterface} from './UserInterface.js';
+
 const api = new Api({
   getStateTimeout: 1000,
 });

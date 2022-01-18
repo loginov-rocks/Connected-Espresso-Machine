@@ -1,4 +1,4 @@
-class BusinessLogic {
+export class BusinessLogic {
   /**
    * @param {Api} api
    * @param {Object} options
