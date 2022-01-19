@@ -66,6 +66,16 @@ npm run start:test-firmware
 This will start **Test Firmware** listening at `http://localhost:3002` and sourcing **Web Assets** from
 `http://localhost:3001`
 
+Actual **Firmware** can be tested by opening the **Connected Espresso Machine** root page with scripts and styles URLs
+overrides in query parameters, like so:
+
+```
+http://192.168.1.1:80/?scriptsUrl=http%3A%2F%2Flocalhost%3A3001%2Fscripts.js&stylesUrl=http%3A%2F%2Flocalhost%3A3001%2Fstyles.css
+```
+
+Where `192.168.1.1` is *local IP* assigned to **Connected Espresso Machine** and `80` is *HTTP port* configured in
+**Firmware**.
+
 ## Reference
 
 * [Quick start with NodeMCU v3 (ESP8266), Arduino ecosystem, and PlatformIO IDE](https://loginov-rocks.medium.com/quick-start-with-nodemcu-v3-esp8266-arduino-ecosystem-and-platformio-ide-b8415bf9a038)

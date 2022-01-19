@@ -27,6 +27,17 @@ paths:
   /:
     get:
       summary: Get Root
+      parameters:
+        - in: query
+          name: scriptsUrl
+          description: Scripts URL override
+          schema:
+            type: string
+        - in: query
+          name: stylesUrl
+          description: Styles URL override
+          schema:
+            type: string
       responses:
         200:
           description: HTML page

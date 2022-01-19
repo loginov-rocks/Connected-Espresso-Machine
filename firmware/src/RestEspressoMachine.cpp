@@ -146,6 +146,9 @@ RestEspressoMachine::RestEspressoMachine(int pumpPin,
 
 void RestEspressoMachine::handleGetRoot()
 {
+    String _scriptsUrl = httpServer.arg("scriptsUrl");
+    String _stylesUrl = httpServer.arg("stylesUrl");
+
     String html = "<!DOCTYPE html>";
     html += "<html lang=\"en\">";
     html += "<head>";
@@ -153,8 +156,8 @@ void RestEspressoMachine::handleGetRoot()
     html += "<meta content=\"width=device-width,initial-scale=1\" name=\"viewport\" />";
     html += "<meta content=\"#5d4037\" name=\"theme-color\" />";
     html += "<title>Connected Espresso Machine</title>";
-    html += "<script src=\"" + scriptsUrl + "\" type=\"module\"></script>";
-    html += "<link href=\"" + stylesUrl + "\" rel=\"stylesheet\" />";
+    html += "<script src=\"" + (_scriptsUrl != "" ? _scriptsUrl : scriptsUrl) + "\" type=\"module\"></script>";
+    html += "<link href=\"" + (_stylesUrl != "" ? _stylesUrl : stylesUrl) + "\" rel=\"stylesheet\" />";
     html += "</head>";
     html += "<body>";
     html += "<div id=\"app\" class=\"app loading\">Loading...</div>";
