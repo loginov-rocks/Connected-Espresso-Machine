@@ -20,26 +20,6 @@ export class BusinessLogic {
 
   /**
    * @public
-   * @param {string} localIp
-   * @returns {void}
-   */
-  setLocalIp(localIp) {
-    this.localIp = localIp;
-    this.updateApiBaseUrl();
-  }
-
-  /**
-   * @public
-   * @param {string} httpPort
-   * @returns {void}
-   */
-  setHttpPort(httpPort) {
-    this.httpPort = httpPort;
-    this.updateApiBaseUrl();
-  }
-
-  /**
-   * @public
    * @param {string} command
    * @param {Object} [parameters={}]
    * @returns {void}
@@ -64,7 +44,7 @@ export class BusinessLogic {
    * @public
    * @returns {void}
    */
-  initialize() {
+  start() {
     // Start polling.
     this.poll();
   }
@@ -75,14 +55,6 @@ export class BusinessLogic {
    */
   stopPolling() {
     clearTimeout(this.pollingTimeout);
-  }
-
-  /**
-   * @private
-   * @returns {void}
-   */
-  updateApiBaseUrl() {
-    this.api.setBaseUrl(`http://${this.localIp}:${this.httpPort}`);
   }
 
   /**

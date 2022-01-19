@@ -8,23 +8,10 @@ export class Api {
 
   /**
    * @public
-   * @param {string} baseUrl
-   * @returns {void}
-   */
-  setBaseUrl(baseUrl) {
-    this.baseUrl = baseUrl;
-  }
-
-  /**
-   * @public
    * @returns {Promise<Object>}
    */
   async getState() {
-    if (!this.baseUrl) {
-      throw new Error('Base URL not set');
-    }
-
-    const url = `${this.baseUrl}/state`;
+    const url = '/state';
 
     const controller = new AbortController();
     const fetchTimeout = setTimeout(() => controller.abort(), this.getStateTimeout);
@@ -50,13 +37,9 @@ export class Api {
    * @returns {Promise<void>}
    */
   async postCommand(command, parameters = {}) {
-    if (!this.baseUrl) {
-      throw new Error('Base URL not set');
-    }
-
     const urlSearchParams = new URLSearchParams(parameters);
     urlSearchParams.set('command', command);
-    const url = `${this.baseUrl}/command?${urlSearchParams.toString()}`;
+    const url = `/command?${urlSearchParams.toString()}`;
 
     console.log('postCommand', url);
 

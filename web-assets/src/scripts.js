@@ -11,28 +11,19 @@ const businessLogic = new BusinessLogic(api, {
 });
 
 const userInterface = new UserInterface({
-  defaultLocalIp: '192.168.1.1',
-  defaultHttpPort: '80',
+  containerId: 'app',
   defaultMakeCoffeeSeconds: 30,
-  localIpStorageKey: 'localIp',
-  httpPortStorageKey: 'httpPort',
   makeCoffeeSecondsStorageKey: 'makeCoffeeSeconds',
   activeStateClassName: 'activeState',
 });
 
 businessLogic.onStateUpdate((state) => userInterface.updateState(state));
 
-userInterface.onLocalIpChange((localIp) => businessLogic.setLocalIp(localIp));
-
-userInterface.onHttpPortChange((httpPort) => businessLogic.setHttpPort(httpPort));
-
 userInterface.onRequestCommand((command, parameters) => businessLogic.requestCommand(command, parameters));
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Initialize User Interface first to provide initialized variables.
-  userInterface.initialize();
-
-  businessLogic.initialize();
+  userInterface.build();
+  businessLogic.start();
 });
 
 $(function() {

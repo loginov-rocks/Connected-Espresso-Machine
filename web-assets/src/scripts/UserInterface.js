@@ -3,33 +3,10 @@ export class UserInterface {
    * @param {Object} options
    */
   constructor(options) {
-    this.defaultLocalIp = options.defaultLocalIp;
-    this.defaultHttpPort = options.defaultHttpPort;
+    this.containerId = options.containerId;
     this.defaultMakeCoffeeSeconds = options.defaultMakeCoffeeSeconds;
-
-    this.localIpStorageKey = options.localIpStorageKey;
-    this.httpPortStorageKey = options.httpPortStorageKey;
     this.makeCoffeeSecondsStorageKey = options.makeCoffeeSecondsStorageKey;
-
     this.activeStateClassName = options.activeStateClassName;
-  }
-
-  /**
-   * @public
-   * @param {(localIp: string) => void} listener
-   * @returns {void}
-   */
-  onLocalIpChange(listener) {
-    this.localIpChangeListener = listener;
-  }
-
-  /**
-   * @public
-   * @param {(httpPort: string) => void} listener
-   * @returns {void}
-   */
-  onHttpPortChange(listener) {
-    this.httpPortChangeListener = listener;
   }
 
   /**
@@ -76,23 +53,12 @@ export class UserInterface {
    * @public
    * @returns {void}
    */
-  initialize() {
+  build() {
     // TODO: Refactor.
-    const app = document.getElementById('app');
-    app.innerHTML = `<div class="row">
+    const container = document.getElementById(this.containerId);
+    container.innerHTML = `<div class="row">
         <div class="col">
           <h1>Connected Espresso Machine</h1>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <label for="localIp">Local IP</label>
-          <input disabled id="localIp" placeholder="192.168.1.1" type="text" />
-        </div>
-        <div class="col">
-          <label for="httpPort">HTTP Port</label>
-          <input disabled id="httpPort" placeholder="80" type="text" />
         </div>
       </div>
 
@@ -158,37 +124,25 @@ export class UserInterface {
       </div>`;
 
     // Get inputs variables from local storage or use defaults.
-    const localIp = localStorage.getItem(this.localIpStorageKey) || this.defaultLocalIp;
-    const httpPort = localStorage.getItem(this.httpPortStorageKey) || this.defaultHttpPort;
     const makeCoffeeSeconds = localStorage.getItem(this.makeCoffeeSecondsStorageKey) || this.defaultMakeCoffeeSeconds;
 
     // Get references to HTML inputs.
-    const localIpInput = document.getElementById('localIp');
-    const httpPortInput = document.getElementById('httpPort');
     const makeCoffeeSecondsInput = document.getElementById('makeCoffeeSeconds');
     // Label for makeCoffeeSecondsInput.
     const makeCoffeeSecondsLabel = document.getElementById('makeCoffeeSecondsLabel');
 
     // Update inputs values with initialized variables.
-    localIpInput.setAttribute('value', localIp);
-    httpPortInput.setAttribute('value', httpPort);
     makeCoffeeSecondsInput.setAttribute('value', makeCoffeeSeconds);
 
     // Attach listeners to inputs.
-    localIpInput.oninput = this.handleLocalIpChange.bind(this);
-    httpPortInput.oninput = this.handleHttpPortChange.bind(this);
     makeCoffeeSecondsInput.onchange = this.handleMakeCoffeeSecondsChange(makeCoffeeSecondsLabel).bind(this);
     // Additional listener to update the label as a mouse moves over the range.
     makeCoffeeSecondsInput.onmousemove = makeCoffeeSecondsInput.onchange;
 
     // Trigger listeners to react to initialized variables.
-    localIpInput.oninput({target: {value: localIp}});
-    httpPortInput.oninput({target: {value: httpPort}});
     makeCoffeeSecondsInput.onchange({target: {value: makeCoffeeSeconds}});
 
     // Enable inputs.
-    localIpInput.removeAttribute('disabled');
-    httpPortInput.removeAttribute('disabled');
     makeCoffeeSecondsInput.removeAttribute('disabled');
 
     // Get references to HTML buttons.
@@ -231,36 +185,6 @@ export class UserInterface {
     this.doneState = document.getElementById('doneState');
     this.boilerState = document.getElementById('boilerState');
     this.pumpState = document.getElementById('pumpState');
-  }
-
-  /**
-   * @private
-   * @param {Event} event
-   * @returns {void}
-   */
-  handleLocalIpChange(event) {
-    const localIp = event.target.value;
-
-    localStorage.setItem(this.localIpStorageKey, localIp);
-
-    if (this.localIpChangeListener) {
-      this.localIpChangeListener(localIp);
-    }
-  }
-
-  /**
-   * @private
-   * @param {Event} event
-   * @returns {void}
-   */
-  handleHttpPortChange(event) {
-    const httpPort = event.target.value;
-
-    localStorage.setItem(this.httpPortStorageKey, httpPort);
-
-    if (this.httpPortChangeListener) {
-      this.httpPortChangeListener(httpPort);
-    }
   }
 
   /**
