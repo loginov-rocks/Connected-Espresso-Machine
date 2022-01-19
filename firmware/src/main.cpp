@@ -16,8 +16,10 @@
 #define TOGGLE_PIN A0
 #define DONE_PIN D7
 #define HTTP_PORT 80
+#define SCRIPTS_URL "http://localhost:3001/scripts.js"
+#define STYLES_URL "http://localhost:3001/styles.css"
 
-RestEspressoMachine restEspressoMachine(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN, DONE_PIN, HTTP_PORT);
+RestEspressoMachine restEspressoMachine(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN, DONE_PIN, HTTP_PORT, SCRIPTS_URL, STYLES_URL);
 
 /**
  * @see https://github.com/tzapu/WiFiManager/blob/master/examples/Basic/Basic.ino

@@ -7,7 +7,7 @@
     "build:swagger": "cp -R node_modules/swagger-ui-dist build",
     "build:openapi": "cp src/openapi.yaml build",
     "build": "npm run build:clean && npm run build:swagger && npm run build:openapi",
-    "start": "http-server -c-1 build"
+    "start": "http-server -c-1 -p 3000 build"
   },
   "repository": {
     "type": "git",

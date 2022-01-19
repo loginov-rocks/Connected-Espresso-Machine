@@ -133,16 +133,35 @@ RestEspressoMachine::RestEspressoMachine(int pumpPin,
                                          int isSteamPin,
                                          int togglePin,
                                          int donePin,
-                                         int _httpPort) : espressoMachine(pumpPin, boilerPin, isBoilingPin, isSteamPin, togglePin, donePin),
-                                                          httpServer(_httpPort)
+                                         int _httpPort,
+                                         String _scriptsUrl,
+                                         String _stylesUrl) : espressoMachine(pumpPin, boilerPin, isBoilingPin, isSteamPin, togglePin, donePin),
+                                                              httpServer(_httpPort)
 {
-    // Remember HTTP port.
+    // Remember HTTP port, scripts and styles URLs.
     httpPort = _httpPort;
+    scriptsUrl = _scriptsUrl;
+    stylesUrl = _stylesUrl;
 }
 
 void RestEspressoMachine::handleGetRoot()
 {
-    httpServer.send(418, "text/plain", "I'm a teapot");
+    String html = "<!DOCTYPE html>";
+    html += "<html lang=\"en\">";
+    html += "<head>";
+    html += "<meta charset=\"utf-8\" />";
+    html += "<meta content=\"width=device-width,initial-scale=1\" name=\"viewport\" />";
+    html += "<meta content=\"#5d4037\" name=\"theme-color\" />";
+    html += "<title>Connected Espresso Machine</title>";
+    html += "<script src=\"" + scriptsUrl + "\" type=\"module\"></script>";
+    html += "<link href=\"" + stylesUrl + "\" rel=\"stylesheet\" />";
+    html += "</head>";
+    html += "<body>";
+    html += "<div id=\"app\" class=\"app loading\">Loading...</div>";
+    html += "</body>";
+    html += "</html>";
+
+    httpServer.send(200, "text/html", html);
 }
 
 void RestEspressoMachine::handleGetState()

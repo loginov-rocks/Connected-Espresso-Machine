@@ -43,28 +43,28 @@ npm run build
 npm start
 ```
 
-Open `http://localhost:8080` in browser and explore `openapi.yaml`
+Open `http://localhost:3000` in browser and explore `openapi.yaml`
 
-## Web App
+## Web Assets
 
 Requires [Node.js](https://nodejs.org):
 
 ```shell
-cd web-app
+cd web-assets
 npm install
 npm start
 ```
 
-Open `http://localhost:8080` in browser.
+Open `http://localhost:3001` in browser.
 
-### Test API
+### Test Firmware
 
 ```shell
-npm run start:test-api
+npm run start:test-firmware
 ```
 
-This will start **Test API** listening at `http://localhost:3000` by default, so **Web App** can be pointed to *local
-IP* `localhost` and *HTTP port* `3000` to test.
+This will start **Test Firmware** listening at `http://localhost:3002` and sourcing **Web Assets** from
+`http://localhost:3001`
 
 ## Reference
 

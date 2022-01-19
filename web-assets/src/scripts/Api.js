@@ -49,7 +49,7 @@ export class Api {
    * @param {Object} [parameters={}]
    * @returns {Promise<void>}
    */
-  async requestCommand(command, parameters = {}) {
+  async postCommand(command, parameters = {}) {
     if (!this.baseUrl) {
       throw new Error('Base URL not set');
     }
@@ -58,7 +58,7 @@ export class Api {
     urlSearchParams.set('command', command);
     const url = `${this.baseUrl}/command?${urlSearchParams.toString()}`;
 
-    console.log('requestCommand', url);
+    console.log('postCommand', url);
 
     const response = await fetch(url, {method: 'post'});
 

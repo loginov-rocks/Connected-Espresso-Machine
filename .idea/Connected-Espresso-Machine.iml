@@ -6,8 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/firmware/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/firmware/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/openapi/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/web-app/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/web-app/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/web-assets/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/web-assets/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/firmware/.pio" />
       <excludeFolder url="file://$MODULE_DIR$/firmware/.vscode" />
       <excludeFolder url="file://$MODULE_DIR$/openapi/build" />

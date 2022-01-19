@@ -17,6 +17,8 @@ private:
     EspressoMachine espressoMachine;
     ESP8266WebServer httpServer;
     int httpPort;
+    String scriptsUrl;
+    String stylesUrl;
 
     // HTTP Handlers.
     void handleGetRoot();
@@ -25,7 +27,7 @@ private:
     void handleNotFound();
 
 public:
-    RestEspressoMachine(int, int, int, int, int, int, int);
+    RestEspressoMachine(int, int, int, int, int, int, int, String, String);
 
     // Setup.
     void setup();

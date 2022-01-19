@@ -46,7 +46,7 @@ export class BusinessLogic {
    */
   async requestCommand(command, parameters = {}) {
     try {
-      await this.api.requestCommand(command, parameters);
+      await this.api.postCommand(command, parameters);
     } catch (error) {
       console.warn('requestCommand', error);
 

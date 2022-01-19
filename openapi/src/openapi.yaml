@@ -26,10 +26,10 @@ servers:
 paths:
   /:
     get:
-      summary: Joke Request
+      summary: Get Root
       responses:
-        418:
-          description: I'm a teapot
+        200:
+          description: HTML page
 
   /state:
     get:
@@ -44,7 +44,7 @@ paths:
 
   /command:
     post:
-      summary: Request Command
+      summary: Post Command
       parameters:
         - in: query
           name: command

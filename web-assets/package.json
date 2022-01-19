@@ -1,10 +1,10 @@
 {
-  "name": "@loginov-rocks/connected-espresso-machine-web-app",
+  "name": "@loginov-rocks/connected-espresso-machine-web-assets",
   "version": "2.0.0",
-  "description": "Connected Espresso Machine - Web App",
+  "description": "Connected Espresso Machine - Web Assets",
   "scripts": {
-    "start:test-api": "node test/api",
-    "start": "http-server -c-1 src"
+    "start": "http-server -c-1 --cors -p 3001 src",
+    "start:test-firmware": "node test/firmware"
   },
   "repository": {
     "type": "git",
