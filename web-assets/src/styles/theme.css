@@ -1,11 +1,12 @@
 body {
-  background: #5d4037;
+  background-color: #5d4037;
   color: #d7ccc8;
 }
 
 a {
   color: #ffffff;
   text-decoration: none;
+  transition: color 300ms;
 }
 
 a:hover {
@@ -13,16 +14,39 @@ a:hover {
 }
 
 .app {
-  border: 1px solid red;
-  padding: 0.5rem;
-}
-
-.col {
-  border: 1px solid green;
   padding: 0.5rem;
 }
 
 .row {
-  border: 1px solid blue;
+  border: 1px solid #795548;
+  border-radius: 0.5rem;
+  margin: 0.5rem;
+}
+
+.col {
   padding: 0.5rem;
+}
+
+input[type=button] {
+  background-color: #795548;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: inset 0 0 0.5rem 0.25rem rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  transition: background-color 300ms, box-shadow 300ms, color 300ms;
+}
+
+input[type=button] + input[type=button] {
+  margin-top: 0.5rem;
+}
+
+input[type=button]:active {
+  background-color: #d32f2f;
+  color: #ffffff;
+}
+
+input[type=button]:disabled {
+  background-color: #5d4037;
+  box-shadow: inset 0 0 0.5rem 0.25rem rgba(0, 0, 0, 0.25);
+  color: #d7ccc8;
 }

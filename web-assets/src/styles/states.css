@@ -1,21 +1,35 @@
 .loading {
+  text-align: center;
 }
 
-.activeState {
-  font-weight: bold;
+.active {
+  color: #d32f2f;
+}
+
+input[type=button].active {
+  background-color: #5d4037;
+  color: #d7ccc8;
 }
 
 .commandState {
+  transition: color 300ms;
 }
 
 .doneState {
+  transition: color 300ms;
 }
 
 .pumpState {
+  margin-bottom: 0.5rem;
+  transition: color 300ms;
 }
 
 .boilerState {
+  margin-bottom: 0.5rem;
+  transition: color 300ms;
 }
 
 .toggleState {
+  text-align: center;
+  transition: color 300ms;
 }

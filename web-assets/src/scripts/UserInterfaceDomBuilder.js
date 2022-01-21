@@ -31,7 +31,7 @@ export class UserInterfaceDomBuilder {
 
       <div class="row">
         <div class="col">
-          <div>Command: <span class="commandState" id="commandState">Unknown</span></div>
+          <span class="commandState" id="commandState">Unknown</span>
         </div>
         <div class="col">
           <span class="doneState" id="doneState">Done</span>
@@ -44,9 +44,9 @@ export class UserInterfaceDomBuilder {
       <div class="row">
         <div class="col">
           <span class="boilerState" id="boilerState">Boiler</span>
-          <input disabled id="makeSteam" type="button" value="Make Steam" />
-          <input disabled id="boil" type="button" value="Boil" />
           <input disabled id="coolDown" type="button" value="Cool Down" />
+          <input disabled id="boil" type="button" value="Boil" />
+          <input disabled id="makeSteam" type="button" value="Make Steam" />
         </div>
         <div class="col">
           <span class="pumpState" id="pumpState">Pump</span>

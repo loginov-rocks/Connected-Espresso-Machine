@@ -18,13 +18,16 @@ export class UserInterface {
    * @returns {void}
    */
   updateState(state) {
-    const toggleState = state ? state.components.toggleState : null;
-    this.updateActiveState(this.toggleMakeSteamState, toggleState === 'makeSteam');
-    this.updateActiveState(this.toggleOffState, toggleState === 'off');
-    this.updateActiveState(this.toggleBoilState, toggleState === 'boil');
-    this.updateActiveState(this.togglePourWaterState, toggleState === 'pourWater');
+    const command = state ? state.command : null;
+    this.commandState.textContent = command || 'Unknown';
+    this.updateActiveState(this.offButton, command === 'off');
+    this.updateActiveState(this.pourWaterButton, command === 'pourWater');
+    this.updateActiveState(this.stopPouringWaterButton, command === 'stopPouringWater');
+    this.updateActiveState(this.boilButton, command === 'boil');
+    this.updateActiveState(this.makeSteamButton, command === 'makeSteam');
+    this.updateActiveState(this.coolDownButton, command === 'coolDown');
+    this.updateActiveState(this.makeCoffeeButton, command === 'makeCoffee');
 
-    this.commandState.textContent = state ? state.command : 'Unknown';
     if (state && state.isCommandChanged) {
       // Blink for 1 second if the command changed.
       this.updateActiveState(this.commandState, true);
@@ -32,11 +35,19 @@ export class UserInterface {
     }
 
     this.updateActiveState(this.doneState, state && state.isDone);
-    this.updateActiveState(this.boilerState, state && state.components.boiler);
+
     this.updateActiveState(this.pumpState, state && state.components.pump);
 
-    // Enable or disable buttons based on state and toggle.
-    if (state === null || ['makeSteam', 'boil', 'pourWater'].includes(state.components.toggleState)) {
+    this.updateActiveState(this.boilerState, state && state.components.boiler);
+
+    const toggleState = state ? state.components.toggleState : null;
+    this.updateActiveState(this.toggleMakeSteamState, toggleState === 'makeSteam');
+    this.updateActiveState(this.toggleOffState, toggleState === 'off');
+    this.updateActiveState(this.toggleBoilState, toggleState === 'boil');
+    this.updateActiveState(this.togglePourWaterState, toggleState === 'pourWater');
+
+    // Enable or disable buttons based on the toggle state.
+    if (toggleState === null || ['makeSteam', 'boil', 'pourWater'].includes(toggleState)) {
       this.buttons.forEach((button) => button.setAttribute('disabled', true));
     } else {
       this.buttons.forEach((button) => button.removeAttribute('disabled'));
@@ -84,45 +95,45 @@ export class UserInterface {
     makeCoffeeSecondsInput.removeAttribute('disabled');
 
     // Get references to HTML buttons.
-    const offButton = document.getElementById('off');
-    const makeSteamButton = document.getElementById('makeSteam');
-    const boilButton = document.getElementById('boil');
-    const coolDownButton = document.getElementById('coolDown');
-    const pourWaterButton = document.getElementById('pourWater');
-    const stopPouringWaterButton = document.getElementById('stopPouringWater');
-    const makeCoffeeButton = document.getElementById('makeCoffee');
+    this.offButton = document.getElementById('off');
+    this.pourWaterButton = document.getElementById('pourWater');
+    this.stopPouringWaterButton = document.getElementById('stopPouringWater');
+    this.boilButton = document.getElementById('boil');
+    this.makeSteamButton = document.getElementById('makeSteam');
+    this.coolDownButton = document.getElementById('coolDown');
+    this.makeCoffeeButton = document.getElementById('makeCoffee');
 
     // Attach listeners to buttons.
-    offButton.onclick = () => this.handleCommand('off');
-    makeSteamButton.onclick = () => this.handleCommand('makeSteam');
-    boilButton.onclick = () => this.handleCommand('boil');
-    coolDownButton.onclick = () => this.handleCommand('coolDown');
-    pourWaterButton.onclick = () => this.handleCommand('pourWater');
-    stopPouringWaterButton.onclick = () => this.handleCommand('stopPouringWater');
-    makeCoffeeButton.onclick = () => {
+    this.offButton.onclick = () => this.handleCommand('off');
+    this.pourWaterButton.onclick = () => this.handleCommand('pourWater');
+    this.stopPouringWaterButton.onclick = () => this.handleCommand('stopPouringWater');
+    this.boilButton.onclick = () => this.handleCommand('boil');
+    this.makeSteamButton.onclick = () => this.handleCommand('makeSteam');
+    this.coolDownButton.onclick = () => this.handleCommand('coolDown');
+    this.makeCoffeeButton.onclick = () => {
       this.handleCommand('makeCoffee', {seconds: makeCoffeeSecondsInput.value});
     };
 
     // Keep references to buttons to react to state updates.
     this.buttons = [
-      offButton,
-      makeSteamButton,
-      boilButton,
-      coolDownButton,
-      pourWaterButton,
-      stopPouringWaterButton,
-      makeCoffeeButton,
+      this.offButton,
+      this.pourWaterButton,
+      this.stopPouringWaterButton,
+      this.boilButton,
+      this.makeSteamButton,
+      this.coolDownButton,
+      this.makeCoffeeButton,
     ];
 
     // Get and keep references to HTML elements representing various states.
+    this.commandState = document.getElementById('commandState');
+    this.doneState = document.getElementById('doneState');
+    this.pumpState = document.getElementById('pumpState');
+    this.boilerState = document.getElementById('boilerState');
     this.toggleMakeSteamState = document.getElementById('toggleMakeSteamState');
     this.toggleOffState = document.getElementById('toggleOffState');
     this.toggleBoilState = document.getElementById('toggleBoilState');
     this.togglePourWaterState = document.getElementById('togglePourWaterState');
-    this.commandState = document.getElementById('commandState');
-    this.doneState = document.getElementById('doneState');
-    this.boilerState = document.getElementById('boilerState');
-    this.pumpState = document.getElementById('pumpState');
   }
 
   /**
