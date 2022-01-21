@@ -1,8 +1,8 @@
-.activeState {
-  font-weight: bold;
+.loading {
 }
 
-.toggleState {
+.activeState {
+  font-weight: bold;
 }
 
 .commandState {
@@ -11,8 +11,11 @@
 .doneState {
 }
 
+.pumpState {
+}
+
 .boilerState {
 }
 
-.pumpState {
+.toggleState {
 }
