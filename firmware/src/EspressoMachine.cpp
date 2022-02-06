@@ -274,7 +274,7 @@ void EspressoMachine::work()
 
     case EspressoMachineCommand::TogglePourWater:
         pump.on();
-        boiler.setTargetTemp(BoilerTemp::Cold);
+        boiler.setTargetTemp(BoilerTemp::Boiling);
         break;
 
     // Off by default.
