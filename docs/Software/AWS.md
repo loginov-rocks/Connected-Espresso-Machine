@@ -36,3 +36,29 @@ section) and configure policies as below.
   }
 ]
 ```
+
+## User Policy
+
+User is only needed to support CD done with GitHub Actions.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::{BUCKET_NAME}/*",
+        "arn:aws:s3:::{BUCKET_NAME}"
+      ]
+    }
+  ]
+}
+```
