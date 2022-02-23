@@ -1,5 +1,38 @@
 # Connected Espresso Machine
 
+**Connected Espresso Machine** is a primer on _how to turn "dumb" old coffeemaker/teapot/anything into a smart connected
+device_ with a bit of hardware work and programming. For that, a series of [articles](#articles) was written for you to
+either have fun or implement your own similar project!
+
+During the implementation of embedded projects, I faced different approaches to code firmware, so in the articles, I
+tried to describe _common programming patterns_ that can be accommodated in your hobby projects.
+
+In the current reincarnation, the espresso machine is connected to the home Wi-Fi network and exposes
+**[REST API](#openapi)** that is used by the **Web App** to control the espresso machine accessible from the same
+network.
+
+**[Web Assets](#web-assets)** (JavaScript and CSS) are served from the **AWS S3 Bucket** and can be updated at any time
+without the update of the firmware. While the firmware itself can be flashed _Over-the-Air_ from **PlatformIO IDE**.
+
+While **NodeMCU** is used as a single microcontroller, the implementation is not specific to it and actually, **Arduino
+Uno** was used initially to control the AC components of the espresso machine.
+
+## Contents
+
+1. [Articles](#articles)
+2. [Architecture](#architecture)
+    1. [REST](#rest)
+3. [Hardware](#hardware)
+    1. [Controller Board Scheme](#controller-board-scheme)
+    2. [AC Scheme](#ac-scheme)
+4. [Firmware](#firmware)
+    1. [Class Diagram](#class-diagram)
+5. [OpenAPI](#openapi)
+6. [Web Assets](#web-assets)
+    1. [Test Firmware](#test-firmware)
+7. [Reference](#reference)
+8. [Gists](#gists)
+
 ## Articles
 
 Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-machine-c9576e4bc43a)
@@ -13,19 +46,73 @@ Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-ma
 6. Over-the-Air Updates:
    [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-over-the-air-updates-part-6-76ae32736f73)
 7. Assembly: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-assembly-part-7-7b590ef343fd)
-8. REST and Web App: Medium
+8. REST and Web App: Medium...
+
+## Architecture
+
+### REST
+
+![REST Architecture](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Architecture/REST.png)
 
 ## Hardware
 
-### Scheme
+### Controller Board Scheme
 
-![Hardware Scheme](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Hardware/Schemes/5-Final-NodeMCU.png)
+![Controller Board Scheme](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Hardware/Schemes/5-Final-NodeMCU.png)
+
+### AC Scheme
+
+![AC Scheme](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Hardware/Schemes/AC-Scheme.png)
 
 ## Firmware
 
 ### Class Diagram
 
 ![Firmware Class Diagram](https://raw.githubusercontent.com/loginov-rocks/Connected-Espresso-Machine/main/docs/Firmware/Class-Diagram.png)
+
+## OpenAPI
+
+Requires [Node.js](https://nodejs.org):
+
+```shell
+cd openapi
+npm install
+npm run build
+npm start
+```
+
+Open `http://localhost:3000` in browser and explore `openapi.yaml`
+
+## Web Assets
+
+Requires [Node.js](https://nodejs.org):
+
+```shell
+cd web-assets
+npm install
+npm start
+```
+
+Open `http://localhost:3001` in browser.
+
+### Test Firmware
+
+```shell
+npm run start:test-firmware
+```
+
+This will start **Test Firmware** listening at `http://localhost:3002` and sourcing **Web Assets** from
+`http://localhost:3001`
+
+Actual **Firmware** can be tested by opening the **Connected Espresso Machine** root page with scripts and styles URLs
+overrides in query parameters, like so:
+
+```
+http://192.168.1.1:80/?scriptsUrl=http%3A%2F%2Flocalhost%3A3001%2Fscripts.js&stylesUrl=http%3A%2F%2Flocalhost%3A3001%2Fstyles.css
+```
+
+Where `192.168.1.1` is *local IP* assigned to **Connected Espresso Machine** and `80` is *HTTP port* configured in
+**Firmware**.
 
 ## Reference
 

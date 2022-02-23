@@ -81,6 +81,16 @@ class EspressoMachine {
     void work()
 }
 
+class RestEspressoMachine {
+    void setup()
+    ..
+    int getHttpPort()
+    ..
+    void work()
+}
+
+class ESP8266WebServer <<External>>
+
 Boiler <|- Relay
 Boiler *-- BoilerTemp
 
@@ -91,5 +101,8 @@ EspressoMachine *- EspressoMachineCommand
 EspressoMachine *-- Relay: pump
 EspressoMachine *-- Boiler: boiler
 EspressoMachine *-- Toggle: toggle
+
+RestEspressoMachine *-- EspressoMachine: espressoMachine
+RestEspressoMachine *- ESP8266WebServer: httpServer
 
 @enduml

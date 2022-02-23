@@ -1,5 +1,5 @@
 #include "ArduinoOTA.h"
-#include "EspressoMachine.h"
+#include "RestEspressoMachine.h"
 #include "WiFiManager.h"
 
 #define SERIAL_BAUDRATE 9600
@@ -15,8 +15,11 @@
 #define BOILER_IS_STEAM_PIN D6
 #define TOGGLE_PIN A0
 #define DONE_PIN D7
+#define HTTP_PORT 80
+#define SCRIPTS_URL "https://connected-espresso-machine-web-assets.s3.eu-west-1.amazonaws.com/scripts.js"
+#define STYLES_URL "https://connected-espresso-machine-web-assets.s3.eu-west-1.amazonaws.com/styles.css"
 
-EspressoMachine espressoMachine(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN, DONE_PIN);
+RestEspressoMachine restEspressoMachine(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN, DONE_PIN, HTTP_PORT, SCRIPTS_URL, STYLES_URL);
 
 /**
  * @see https://github.com/tzapu/WiFiManager/blob/master/examples/Basic/Basic.ino
@@ -99,6 +102,17 @@ void setupOtaUpdates()
     Serial.println("Over-the-Air Updates setup was successful!");
 }
 
+void setupRestEspressoMachine()
+{
+    Serial.println("Setup Rest Espresso Machine...");
+
+    restEspressoMachine.setup();
+
+    Serial.println("Rest Espresso Machine setup was successful!");
+    Serial.print("HTTP port: ");
+    Serial.println(restEspressoMachine.getHttpPort());
+}
+
 void setup()
 {
     Serial.begin(SERIAL_BAUDRATE);
@@ -106,6 +120,7 @@ void setup()
 
     setupWiFi();
     setupOtaUpdates();
+    setupRestEspressoMachine();
 
     Serial.println("Setup was successful!");
 }
@@ -113,5 +128,5 @@ void setup()
 void loop()
 {
     ArduinoOTA.handle();
-    espressoMachine.work();
+    restEspressoMachine.work();
 }

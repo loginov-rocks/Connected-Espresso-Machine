@@ -1,0 +1,25 @@
+{
+  "name": "@loginov-rocks/connected-espresso-machine-web-assets",
+  "version": "2.0.0",
+  "description": "Connected Espresso Machine - Web Assets",
+  "scripts": {
+    "start": "http-server -c-1 --cors -p 3001 src",
+    "start:test-firmware": "node test/firmware"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loginov-rocks/Connected-Espresso-Machine.git"
+  },
+  "author": "Danila Loginov <danila@loginov.rocks> (https://loginov.rocks)",
+  "license": "MIT",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/loginov-rocks/Connected-Espresso-Machine/issues"
+  },
+  "homepage": "https://github.com/loginov-rocks/Connected-Espresso-Machine",
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "http-server": "^14.1.0"
+  }
+}
