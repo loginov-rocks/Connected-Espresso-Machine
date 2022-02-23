@@ -14,7 +14,7 @@ section) and configure policies as below.
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::{BUCKET_NAME}/*"
+      "Resource": "arn:aws:s3:::${BUCKET_NAME}/*"
     }
   ]
 }
@@ -55,8 +55,8 @@ User is only needed to support CD done with GitHub Actions.
         "s3:DeleteObject"
       ],
       "Resource": [
-        "arn:aws:s3:::{BUCKET_NAME}/*",
-        "arn:aws:s3:::{BUCKET_NAME}"
+        "arn:aws:s3:::${BUCKET_NAME}/*",
+        "arn:aws:s3:::${BUCKET_NAME}"
       ]
     }
   ]

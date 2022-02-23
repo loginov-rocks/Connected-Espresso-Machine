@@ -64,7 +64,7 @@ String RestEspressoMachine::commandToString(EspressoMachineCommand command)
     }
 }
 
-// TODO: Optimize.
+// Could be done in a more elegant way :)
 boolean RestEspressoMachine::isValidCommandString(String string)
 {
     return string.equals("off") ||
@@ -81,7 +81,7 @@ boolean RestEspressoMachine::isValidCommandString(String string)
            string.equals("togglePourWater");
 }
 
-// TODO: Optimize.
+// Could be done in a more elegant way :)
 EspressoMachineCommand RestEspressoMachine::stringToCommand(String string)
 {
     // External commands.
