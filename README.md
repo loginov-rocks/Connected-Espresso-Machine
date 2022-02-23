@@ -12,8 +12,8 @@ Series: [Medium](https://loginov-rocks.medium.com/list/diy-connected-espresso-ma
    [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-main-class-and-indicators-part-5-2f7f45d01c31)
 6. Over-the-Air Updates:
    [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-over-the-air-updates-part-6-76ae32736f73)
-7. Assembly: Medium
-8. to be continued...
+7. Assembly: [Medium](https://loginov-rocks.medium.com/diy-connected-espresso-machine-assembly-part-7-7b590ef343fd)
+8. REST and Web App: Medium
 
 ## Hardware
 
