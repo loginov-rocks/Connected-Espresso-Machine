@@ -1,0 +1,120 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Outputs": {
+    "WebAssetsBucketRegionalDomainName": {
+      "Value": {
+        "Fn::GetAtt": [
+          "WebAssetsBucket",
+          "RegionalDomainName"
+        ]
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-WebAssetsBucketRegionalDomainName"
+        }
+      }
+    }
+  },
+  "Resources": {
+    "CdUser": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Action": [
+                    "s3:ListBucket",
+                    "s3:GetObject",
+                    "s3:PutObject",
+                    "s3:DeleteObject"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "WebAssetsBucket",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": [
+                        "${WebAssetsBucketArn}/*",
+                        {
+                          "WebAssetsBucketArn": {
+                            "Fn::GetAtt": [
+                              "WebAssetsBucket",
+                              "Arn"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "PolicyName": "CustomPolicy"
+          }
+        ],
+        "UserName": {
+          "Fn::Sub": "${AWS::StackName}-cd-user"
+        }
+      }
+    },
+    "WebAssetsBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "PublicRead",
+        "BucketName": {
+          "Fn::Sub": "${AWS::StackName}-web-assets-bucket"
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedMethods": [
+                "GET"
+              ],
+              "AllowedOrigins": [
+                "*"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "WebAssetsBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "WebAssetsBucket"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Principal": "*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Sub": [
+                  "${WebAssetsBucketArn}/*",
+                  {
+                    "WebAssetsBucketArn": {
+                      "Fn::GetAtt": [
+                        "WebAssetsBucket",
+                        "Arn"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
