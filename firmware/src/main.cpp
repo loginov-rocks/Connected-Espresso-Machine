@@ -16,8 +16,8 @@
 #define TOGGLE_PIN A0
 #define DONE_PIN D7
 #define HTTP_PORT 80
-#define SCRIPTS_URL "https://connected-espresso-machine-web-assets.s3.eu-west-1.amazonaws.com/scripts.js"
-#define STYLES_URL "https://connected-espresso-machine-web-assets.s3.eu-west-1.amazonaws.com/styles.css"
+#define SCRIPTS_URL "https://connected-espresso-machine-web-assets-bucket.s3.us-east-1.amazonaws.com/scripts.js"
+#define STYLES_URL "https://connected-espresso-machine-web-assets-bucket.s3.us-east-1.amazonaws.com/styles.css"
 
 RestEspressoMachine restEspressoMachine(PUMP_RELAY_PIN, BOILER_RELAY_PIN, BOILER_IS_BOILING_PIN, BOILER_IS_STEAM_PIN, TOGGLE_PIN, DONE_PIN, HTTP_PORT, SCRIPTS_URL, STYLES_URL);
 
